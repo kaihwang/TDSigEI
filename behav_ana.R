@@ -23,20 +23,20 @@ Data <-data.frame(Subj = character(),
                   IbsetTune =numeric ())
 
 # load data
-Subjects <- c(101, 301)
+Subjects <- c(102, 103)
 for (s in Subjects) {
   file.names <- dir(path, pattern = paste("^.*", s, ".*\\.txt", sep=""))
   
   for (i in 1:length(file.names)) {
       tmpData <- read.table(file = file.names[i], header = FALSE, sep = "\t",
-             colClasses = c("NULL", "factor", "factor", "integer", "integer", "integer", "integer", "numeric", "numeric", "NULL"),
-             col.names = c(" ","Condtion", "MotorMapping", "Match", "Accu", "RH", "LH", "RT", "OnsetTime"," "))
+             colClasses = c("NULL", "factor", "factor", "integer", "integer", "integer", "integer", "integer", "numeric", "numeric", "NULL"),
+             col.names = c(" ","Condtion", "MotorMapping", "Match", "Accu", "FA", "RH", "LH", "RT", "OnsetTime"," "))
       tmpData$Subj <- paste("S",s, sep="")
       Data <- rbind(Data, tmpData)
   }
 }
 
 # tabulate
-Stats.Accu <- tapply(Data$Accu, list(Data$Condtion, Data$Match), mean)
-Stats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean)
+Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion, Data$Match), mean)
+Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion, Data$Match), mean)
 
