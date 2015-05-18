@@ -23,7 +23,7 @@ Data <-data.frame(Subj = character(),
                   IbsetTune =numeric ())
 
 # load data
-Subjects <- c('P001', 'P002', 201)
+Subjects <- c(510)
 for (s in Subjects) {
   file.names <- dir(path, pattern = paste("^.*", s, ".*\\.txt", sep=""))
   
@@ -35,8 +35,12 @@ for (s in Subjects) {
       Data <- rbind(Data, tmpData)
   }
 }
-
+Data[Data$RT==-1,"RT"]<-''
+Data$RT<-as.numeric(Data$RT)
 # tabulate
 Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion, Data$Match), mean)
-Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion, Data$Match), mean)
+Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion, Data$Match), mean, na.rm = TRUE)
+
+
+
 
