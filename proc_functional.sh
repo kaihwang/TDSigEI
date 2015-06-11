@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-WD='/home/despoB/kaihwang/TDSigEI'
+WD='/home/despoB/TRSEPPI/TDSigEI'
 
 for s in P001; do
 
