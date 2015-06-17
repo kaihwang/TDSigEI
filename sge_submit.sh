@@ -3,8 +3,8 @@
 #for SGE jobs
 
 #mkdir tmp;
-WD='/home/despoB/kaihwang/TDSigEI'
-SCRIPTS='/home/despoB/kaihwang/bin/TDSigEI'
+WD='/home/despoB/TRSEPPI/TDSigEI'
+SCRIPTS='/home/despoB/lyang/TDSigEI'
 
 cd ${WD}
 
@@ -28,8 +28,8 @@ cd ${WD}
 
 for Subject in $(ls -d *) ; do
 
-	if [ ! -e ${WD}/${Subject}/MPRAGE/mprage_final.nii.gz ]; then
-		sed "s/s in P001/s in ${Subject}/g" < ${SCRIPTS}/proc_mprage.sh> /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
-		qsub -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
+	if [ "${Subject}" != "Raw" ] && [ ! -e ${WD}/${Subject}/MPRAGE/mprage_final.nii.gz ]; then
+		sed "s/s in P001/s in ${Subject}/g" < ${SCRIPTS}/proc_mprage.sh> /home/despoB/lyang/tmp/proc_mprage_${Subject}.sh
+		qsub -V -M lyang -m e -e ~/tmp -o ~/tmp /home/despoB/lyang/tmp/proc_mprage_${Subject}.sh
 	fi	
 done
