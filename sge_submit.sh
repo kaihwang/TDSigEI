@@ -26,7 +26,7 @@ cd ${WD}
 # done
 
 
-for Subject in $(ls -d *) ; do
+for Subject in 512; do
 
 	if [ "${Subject}" != "Raw" ] && [ ! -e ${WD}/${Subject}/MPRAGE/mprage_final.nii.gz ]; then
 		sed "s/s in P001/s in ${Subject}/g" < ${SCRIPTS}/proc_mprage.sh> /home/despoB/lyang/tmp/proc_mprage_${Subject}.sh
