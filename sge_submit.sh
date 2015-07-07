@@ -4,7 +4,7 @@
 
 #mkdir tmp;
 WD='/home/despoB/TRSEPPI/TDSigEI'
-SCRIPTS='/home/despoB/lyang/TDSigEI'
+SCRIPTS='/home/despoB/kaihwang/bin/TDSigEI'
 
 cd ${WD}
 
@@ -26,10 +26,10 @@ cd ${WD}
 # done
 
 
-for Subject in 512; do
+for Subject in $(ls -d 5*); do
 
 	if [ "${Subject}" != "Raw" ] && [ ! -e ${WD}/${Subject}/MPRAGE/mprage_final.nii.gz ]; then
-		sed "s/s in P001/s in ${Subject}/g" < ${SCRIPTS}/proc_mprage.sh> /home/despoB/lyang/tmp/proc_mprage_${Subject}.sh
-		qsub -V -M lyang -m e -e ~/tmp -o ~/tmp /home/despoB/lyang/tmp/proc_mprage_${Subject}.sh
+		sed "s/s in P001/s in ${Subject}/g" < ${SCRIPTS}/proc_mprage.sh> /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
+		qsub -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
 	fi	
 done
