@@ -4,7 +4,8 @@
 WD='/home/despoB/TRSEPPI/TDSigEI'
 
 cd ${WD}
-for subj in $(ls -d *); do
+#for subj in $(ls -d *); do
+for subj in 511; do
 	if [ "${subj}" != "Raw" ]; then
 		cd ${WD}/${subj}
 
@@ -18,9 +19,11 @@ for subj in $(ls -d *); do
 
 		for r in $(seq 1 24); do
 			i=$(($r-1))
+				
+			if [ $i -le ${#BOLD_DIRs[@]} ] && [ ! -L ${WD}/${subj}/run${r} ]; then
 	
-			if [ $i -le ${#BOLD_DIRS[@]} ] && [ ! -L ${WD}/${subj}/run${r} ]; then
-				echo ${BOLD_DIRS[i]}
+				echo ${BOLD_DIRs[i]}
+
 				ln -s ${BOLD_DIRs[i]} run${r}
 				
 			fi
