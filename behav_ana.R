@@ -23,7 +23,7 @@ Data <-data.frame(Subj = character(),
                   IbsetTune =numeric ())
 
 # load data
-Subjects <- c(510)
+Subjects <- c(503, 505, 508, 509, 510, 511, 512, 513, 516, 517, 518, 523, 527)
 for (s in Subjects) {
   file.names <- dir(path, pattern = paste("^.*", s, ".*\\.txt", sep=""))
   
