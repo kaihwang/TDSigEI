@@ -16,8 +16,8 @@ for s in 503; do
 	-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/overlap.nii.gz \
 	-polort A \
 	-num_stimts 8 \
-	-stim_times 1 ${WD}/Scripts/${s}_face_stimtime.1D 'GAM' -stim_label 1 Faces \
-	-stim_times 2 ${WD}/Scripts/${s}_house_stimtime.1D 'GAM' -stim_label 2 Scenes \
+	-stim_times 1 ${WD}/Scripts/${s}_face_stimtime.1D 'BLOCK5(1,1)' -stim_label 1 Faces \
+	-stim_times 2 ${WD}/Scripts/${s}_house_stimtime.1D 'BLOCK5(1,1)' -stim_label 2 Scenes \
 	-stim_file 3 ${WD}/${s}/Motion_allruns.1D[0] -stim_label 3 motpar1 -stim_base 3 \
 	-stim_file 4 ${WD}/${s}/Motion_allruns.1D[1] -stim_label 4 motpar2 -stim_base 4 \
 	-stim_file 5 ${WD}/${s}/Motion_allruns.1D[2] -stim_label 5 motpar3 -stim_base 5 \
@@ -32,6 +32,7 @@ for s in 503; do
 	-tout \
 	-bucket Localizer_FFAPPA_stats \
 	-x1D Localizer_FFAPPA_design_mat \
+	-GOFORIT \
 	-x1D_stop  
 
 	. Localizer_FFAPPA_stats.REML_cmd 
@@ -40,8 +41,8 @@ for s in 503; do
 	-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/overlap.nii.gz \
 	-polort A \
 	-num_stimts 8 \
-	-stim_times 1 ${WD}/Scripts/${s}_LH_stimtime.1D 'GAM' -stim_label 1 LH \
-	-stim_times 2 ${WD}/Scripts/${s}_RH_stimtime.1D 'GAM' -stim_label 2 RH \
+	-stim_times 1 ${WD}/Scripts/${s}_LH_stimtime.1D 'BLOCK5(1,1)' -stim_label 1 LH \
+	-stim_times 2 ${WD}/Scripts/${s}_RH_stimtime.1D 'BLOCK5(1,1)' -stim_label 2 RH \
 	-stim_file 3 ${WD}/${s}/Motion_allruns.1D[0] -stim_label 3 motpar1 -stim_base 3 \
 	-stim_file 4 ${WD}/${s}/Motion_allruns.1D[1] -stim_label 4 motpar2 -stim_base 4 \
 	-stim_file 5 ${WD}/${s}/Motion_allruns.1D[2] -stim_label 5 motpar3 -stim_base 5 \
@@ -56,6 +57,7 @@ for s in 503; do
 	-tout \
 	-bucket Localizer_Motor_stats \
 	-x1D Localizer_Motor_design_mat \
+	-GOFORIT \
 	-x1D_stop  
 
 	. Localizer_Motor_stats.REML_cmd 
