@@ -4,7 +4,7 @@
 WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 
-for s in 505; do
+for s in 503 508 509 511 512 513 516 517 518 519 523 527; do
 	cd ${WD}/${s}
 
 	ln -s /home/despoB/kaihwang/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii \
