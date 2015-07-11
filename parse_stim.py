@@ -57,10 +57,10 @@ for s in Subjects:
 				House_block_trials.append(block_df.loc[tr,'OnsetTime'])
 
 			if block_df.loc[tr,'RH'] and block_df.loc[tr,'Condition'] in ('Fp', 'Hp'):
-				RH_block_trials.append(block_df.loc[tr,'OnsetTime'])						
+				RH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])  						
 			
 			if block_df.loc[tr,'LH'] and block_df.loc[tr,'Condition'] in ('Fp', 'Hp'):
-				LH_block_trials.append(block_df.loc[tr,'OnsetTime'])
+				LH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])
 
 		if any(Face_block_trials):
 			Face_stimtime[0][i] = Face_block_trials
