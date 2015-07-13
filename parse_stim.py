@@ -35,6 +35,129 @@ for s in Subjects:
 	if os.path.isfile(fn) is False:			
 		np.savetxt(fn, mapping_runs, fmt='%2d')
 
+	#write out target+distractor (TD) runs
+	TD_runs = run_order[(run_order['Condition'] == 'HF') | (run_order['Condition'] == 'FH')]['Block'].values	
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_TD_runs' %s
+	if os.path.isfile(fn) is False:			
+		np.savetxt(fn, TD_runs, fmt='%2d')
+
+	#write out target only runs	
+	To_runs = run_order[(run_order['Condition'] == 'Ho') | (run_order['Condition'] == 'Fo')]['Block'].values	
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_To_runs' %s
+	if os.path.isfile(fn) is False:			
+		np.savetxt(fn, To_runs, fmt='%2d')
+
+
+	#create TD stimulus timing for gPPI analysis
+	TD_FT_stimtime = [['*']*8] #8 runs of TD conditions
+	TD_FD_stimtime = [['*']*8] 
+	TD_HT_stimtime = [['*']*8] 
+	TD_HD_stimtime = [['*']*8] 
+	TD_RH_stimtime = [['*']*8] #extract responses
+	TD_LH_stimtime = [['*']*8] 
+
+	for i, block in enumerate(TD_runs):
+		block_df = df[df['Block']==block].reset_index()
+		FT_block_trials = []
+		FD_block_trials = []
+		HT_block_trials = []
+		HD_block_trials = []
+		RH_block_trials = []
+		LH_block_trials = []
+
+		for tr in np.arange(0, len(block_df)):
+			
+			if block_df.loc[tr,'Condition'] in ('FH'):
+				FT_block_trials.append(block_df.loc[tr,'OnsetTime'])
+				HD_block_trials.append(block_df.loc[tr,'OnsetTime'])
+
+			if block_df.loc[tr,'Condition'] in ('HF'):	
+				HT_block_trials.append(block_df.loc[tr,'OnsetTime'])
+				FD_block_trials.append(block_df.loc[tr,'OnsetTime'])
+
+			if block_df.loc[tr,'RH'] and block_df.loc[tr,'Condition'] in ('FH', 'HF'):
+				RH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])  						
+			
+			if block_df.loc[tr,'LH'] and block_df.loc[tr,'Condition'] in ('HF', 'FH'):
+				LH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])
+
+		if any(FT_block_trials):
+			TD_FT_stimtime[0][i] = FT_block_trials
+		if any(FD_block_trials):
+			TD_FD_stimtime[0][i] = FD_block_trials
+		if any(HT_block_trials):
+			TD_HT_stimtime[0][i] = HT_block_trials
+		if any(HD_block_trials):
+			TD_HD_stimtime[0][i] = HD_block_trials
+		if any(RH_block_trials):
+			TD_RH_stimtime[0][i] = RH_block_trials
+		if any(LH_block_trials):
+			TD_LH_stimtime[0][i] = LH_block_trials	
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_TD_FT_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in TD_FT_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_TD_FD_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in TD_FD_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_TD_HT_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in TD_HT_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_TD_HD_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in TD_HD_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()				
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_TD_RH_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in TD_RH_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()				
+
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_TD_LH_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in TD_LH_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()				
+
+
+
+
 	#create localizer regressors
 	Face_stimtime = [['*']*8] #8 runs of FP HP 
 	House_stimtime = [['*']*8]
@@ -64,13 +187,10 @@ for s in Subjects:
 
 		if any(Face_block_trials):
 			Face_stimtime[0][i] = Face_block_trials
-		
 		if any(House_block_trials):
 			House_stimtime[0][i] = House_block_trials
-		
 		if any(RH_block_trials):
 			RH_stimtime[0][i] = RH_block_trials
-		
 		if any(LH_block_trials):	
 			LH_stimtime[0][i] = LH_block_trials
 
@@ -115,8 +235,13 @@ for s in Subjects:
 		f.close()
 
 
-#create FIR regressors
+
+	#create FIR regressors
 block_start_time = np.tile(([1.5, 42, 82.5, 121.5]),[4,1])
+
+# FIR regressors for TD condition
+
+
 for tr in np.arange(0,18):
     StimTime = block_start_time + tr * 1.5
     g = tr+1
