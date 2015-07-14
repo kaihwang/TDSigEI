@@ -156,6 +156,92 @@ for s in Subjects:
 		f.close()				
 
 
+	
+
+
+	#create To stimulus timing for gPPI analysis
+	To_Fo_stimtime = [['*']*8] #8 runs of To conditions
+	To_Ho_stimtime = [['*']*8] 
+	To_RH_stimtime = [['*']*8] #extract responses
+	To_LH_stimtime = [['*']*8] 
+
+	for i, block in enumerate(To_runs):
+		block_df = df[df['Block']==block].reset_index()
+		Fo_block_trials = []
+		Ho_block_trials = []
+		RH_block_trials = []
+		LH_block_trials = []
+
+		for tr in np.arange(0, len(block_df)):
+			
+			if block_df.loc[tr,'Condition'] in ('Fo'):
+				Fo_block_trials.append(block_df.loc[tr,'OnsetTime'])
+
+			if block_df.loc[tr,'Condition'] in ('Ho'):	
+				Ho_block_trials.append(block_df.loc[tr,'OnsetTime'])
+
+			if block_df.loc[tr,'RH'] and block_df.loc[tr,'Condition'] in ('Fo', 'Ho'):
+				RH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])  						
+			
+			if block_df.loc[tr,'LH'] and block_df.loc[tr,'Condition'] in ('Ho', 'Fo'):
+				LH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])
+
+		if any(Fo_block_trials):
+			To_Fo_stimtime[0][i] = Fo_block_trials
+
+		if any(Ho_block_trials):
+			To_Ho_stimtime[0][i] = Ho_block_trials
+
+		if any(RH_block_trials):
+			To_RH_stimtime[0][i] = RH_block_trials
+
+		if any(LH_block_trials):
+			To_LH_stimtime[0][i] = LH_block_trials	
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_To_Fo_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in To_Fo_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()
+
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_To_Ho_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in To_Ho_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()
+			
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_To_RH_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in To_RH_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()				
+
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_To_LH_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in To_LH_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()		
+
+
 
 
 	#create localizer regressors
