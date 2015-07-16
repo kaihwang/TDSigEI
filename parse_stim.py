@@ -18,13 +18,17 @@ for s in Subjects:
 	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_run_order' %s
 	
 	filestring = 'fMRI_Data_%s*.txt' %s
-	timing_logs = glob.glob(filestring)
+	timing_logs = glob.glob(filestring) #files to be loaded
 
+	#load timing logs and concat into a pandas dataframe
 	df = pd.read_table(timing_logs[3], header= None).append(pd.read_table(timing_logs[2], header= None)).append(pd.read_table(timing_logs[1],header= None)).append(pd.read_table(timing_logs[0], header= None))
+	# give each column a name.
 	df.columns = ['SubjID', 'Condition', 'MotorMapping', 'Target', 'Accu', 'FA', 'RH', 'LH', 'RT', 'OnsetTime', 'pic']
 
+	# create new column variable of "block number" for every trial (48 trials per run). 24 blocks totoal 
 	df['Block'] = np.repeat(np.arange(1, 25),48)
 
+	# extract the order of each block condition and save to a text file
 	run_order = df.groupby(['Block', 'Condition', 'MotorMapping']).sum().reset_index()[['Block', 'Condition', 'MotorMapping']]
 	if os.path.isfile(fn) is False:			
 		run_order[['Condition','MotorMapping']].to_csv(fn, index=None, header=None, )
@@ -41,7 +45,7 @@ for s in Subjects:
 	if os.path.isfile(fn) is False:			
 		np.savetxt(fn, TD_runs, fmt='%2d')
 
-	#write out target only runs	
+	#write out target only runs	(To)
 	To_runs = run_order[(run_order['Condition'] == 'Ho') | (run_order['Condition'] == 'Fo')]['Block'].values	
 	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_To_runs' %s
 	if os.path.isfile(fn) is False:			
@@ -50,16 +54,16 @@ for s in Subjects:
 
 
 	#create FIR timing for every condition, extract trial timing for the first trial of every block
-	FH_stimtime = [['*']*24]
-	HF_stimtime = [['*']*24]
+	FH_stimtime = [['*']*24] #stimtime format, * for runs with no events of this stimulus class
+	HF_stimtime = [['*']*24] #create one of this for every condition
 	Fo_stimtime = [['*']*24]
 	Ho_stimtime = [['*']*24]
 	Fp_stimtime = [['*']*24]
 	Hp_stimtime = [['*']*24]
 	
-	for i, block in enumerate(np.arange(1,25)):
-		block_df = df[df['Block']==block].reset_index()
-		FH_block_trials = []
+	for i, block in enumerate(np.arange(1,25)):  #loop through 24 locks
+		block_df = df[df['Block']==block].reset_index() #"view" of block we are curreint sorting through
+		FH_block_trials = [] #empty vector to store trial time info for the current block
 		HF_block_trials = []
 		Ho_block_trials = []
 		Fo_block_trials = []
@@ -68,7 +72,7 @@ for s in Subjects:
 
 		for tr in np.arange(0,48,12):
 			if block_df.loc[tr,'Condition'] in ('FH'):
-				FH_block_trials.append(block_df.loc[tr,'OnsetTime']) 						
+				FH_block_trials.append(block_df.loc[tr,'OnsetTime']) #if a match of condition, append trial timing						
 			
 			if block_df.loc[tr,'Condition'] in ('HF'):
 				HF_block_trials.append(block_df.loc[tr,'OnsetTime']) 
@@ -86,7 +90,7 @@ for s in Subjects:
 				Hp_block_trials.append(block_df.loc[tr,'OnsetTime']) 		
 
 		if any(FH_block_trials):
-			FH_stimtime[0][i] = FH_block_trials		
+			FH_stimtime[0][i] = FH_block_trials	#put trial timing of each block into the stimtime array	
 		if any(HF_block_trials):
 			HF_stimtime[0][i] = HF_block_trials			
 		if any(Fo_block_trials):
@@ -98,6 +102,7 @@ for s in Subjects:
 		if any(Hp_block_trials):
 			Hp_stimtime[0][i] = Hp_block_trials
 
+	#write out stimtime array to text file. 		
 	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_FH_stimtime.1D' %s
 	if os.path.isfile(fn) is False:
 		f = open(fn, 'w')
@@ -105,7 +110,8 @@ for s in Subjects:
 			if val =='*':
 				f.write(val + '\n')
 			else:
-				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+				# this is to dealt with some weird formating issue
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n') 
 		f.close()			
 		
 	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_HF_stimtime.1D' %s
@@ -160,11 +166,15 @@ for s in Subjects:
 
 
 	#create TD stimulus timing for gPPI analysis
+	# FT: face as target
+	# FD: face as distractor
+	# HT: house as target
+	# HD: house as distractor
 	TD_FT_stimtime = [['*']*8] #8 runs of TD conditions
 	TD_FD_stimtime = [['*']*8] 
 	TD_HT_stimtime = [['*']*8] 
 	TD_HD_stimtime = [['*']*8] 
-	TD_RH_stimtime = [['*']*8] #extract responses
+	TD_RH_stimtime = [['*']*8]
 	TD_LH_stimtime = [['*']*8] 
 
 	for i, block in enumerate(TD_runs):
@@ -271,9 +281,11 @@ for s in Subjects:
 
 
 	#create To stimulus timing for gPPI analysis
+	# Fo: Face only, no distractor
+	# Ho: House only
 	To_Fo_stimtime = [['*']*8] #8 runs of To conditions
 	To_Ho_stimtime = [['*']*8] 
-	To_RH_stimtime = [['*']*8] #extract responses
+	To_RH_stimtime = [['*']*8] 
 	To_LH_stimtime = [['*']*8] 
 
 	for i, block in enumerate(To_runs):
@@ -356,6 +368,8 @@ for s in Subjects:
 
 
 	#create localizer regressors
+	# using the mapping runs, get trial timing whenever a face or a house was presented.
+	# get trial timing whenever a button was pressed. 
 	Face_stimtime = [['*']*8] #8 runs of FP HP 
 	House_stimtime = [['*']*8]
 	RH_stimtime = [['*']*8]
@@ -478,10 +492,6 @@ for s in Subjects:
 
 #create FIR regressors
 block_start_time = np.tile(([1.5, 42, 82.5, 121.5]),[4,1])
-
-# FIR regressors for TD condition
-
-
 for tr in np.arange(0,18):
     StimTime = block_start_time + tr * 1.5
     g = tr+1
