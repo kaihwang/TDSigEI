@@ -48,6 +48,117 @@ for s in Subjects:
 		np.savetxt(fn, To_runs, fmt='%2d')
 
 
+
+	#create FIR timing for every condition, extract trial timing for the first trial of every block
+	FH_stimtime = [['*']*24]
+	HF_stimtime = [['*']*24]
+	Fo_stimtime = [['*']*24]
+	Ho_stimtime = [['*']*24]
+	Fp_stimtime = [['*']*24]
+	Hp_stimtime = [['*']*24]
+	
+	for i, block in enumerate(np.arange(1,25)):
+		block_df = df[df['Block']==block].reset_index()
+		FH_block_trials = []
+		HF_block_trials = []
+		Ho_block_trials = []
+		Fo_block_trials = []
+		Hp_block_trials = []
+		Fp_block_trials = []
+
+		for tr in np.arange(0,48,12):
+			if block_df.loc[tr,'Condition'] in ('FH'):
+				FH_block_trials.append(block_df.loc[tr,'OnsetTime']) 						
+			
+			if block_df.loc[tr,'Condition'] in ('HF'):
+				HF_block_trials.append(block_df.loc[tr,'OnsetTime']) 
+
+			if block_df.loc[tr,'Condition'] in ('Fo'):
+				Fo_block_trials.append(block_df.loc[tr,'OnsetTime']) 
+				
+			if block_df.loc[tr,'Condition'] in ('Ho'):
+				Ho_block_trials.append(block_df.loc[tr,'OnsetTime']) 
+				
+			if block_df.loc[tr,'Condition'] in ('Fp'):
+				Fp_block_trials.append(block_df.loc[tr,'OnsetTime']) 
+
+			if block_df.loc[tr,'Condition'] in ('Hp'):
+				Hp_block_trials.append(block_df.loc[tr,'OnsetTime']) 		
+
+		if any(FH_block_trials):
+			FH_stimtime[0][i] = FH_block_trials		
+		if any(HF_block_trials):
+			HF_stimtime[0][i] = HF_block_trials			
+		if any(Fo_block_trials):
+			Fo_stimtime[0][i] = Fo_block_trials		
+		if any(Ho_block_trials):
+			Ho_stimtime[0][i] = Ho_block_trials		
+		if any(Fp_block_trials):
+			Fp_stimtime[0][i] = Fp_block_trials				
+		if any(Hp_block_trials):
+			Hp_stimtime[0][i] = Hp_block_trials
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_FH_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in FH_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()			
+		
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_HF_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in HF_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()			
+	
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_Fo_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in Fo_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()			
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_Ho_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in Ho_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()			
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_Fp_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in Fp_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()	
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_Hp_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in Hp_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()					
+
+
 	#create TD stimulus timing for gPPI analysis
 	TD_FT_stimtime = [['*']*8] #8 runs of TD conditions
 	TD_FD_stimtime = [['*']*8] 
