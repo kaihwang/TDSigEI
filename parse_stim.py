@@ -322,7 +322,50 @@ for s in Subjects:
 
 
 
-	#create FIR regressors
+
+	#create motor regressors
+	RH_stimtime = [['*']*24]
+	LH_stimtime = [['*']*24]
+
+	for i, block in enumerate(np.arange(1,25)):
+		block_df = df[df['Block']==block].reset_index()
+		RH_block_trials = []
+		LH_block_trials = []
+		
+		for tr in np.arange(0, len(block_df)):
+			if block_df.loc[tr,'RH']:
+				RH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])  						
+			
+			if block_df.loc[tr,'LH']:
+				LH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])
+
+		if any(RH_block_trials):
+			RH_stimtime[0][i] = RH_block_trials
+		if any(LH_block_trials):	
+			LH_stimtime[0][i] = LH_block_trials
+
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_RH_allruns_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in RH_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()
+
+	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_LH_allruns_stimtime.1D' %s
+	if os.path.isfile(fn) is False:
+		f = open(fn, 'w')
+		for val in LH_stimtime[0]:
+			if val =='*':
+				f.write(val + '\n')
+			else:
+				f.write(np.array2string(np.around(val,2)).replace('\n','')[4:-1] + '\n')
+		f.close()
+
+#create FIR regressors
 block_start_time = np.tile(([1.5, 42, 82.5, 121.5]),[4,1])
 
 # FIR regressors for TD condition

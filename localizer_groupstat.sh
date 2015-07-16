@@ -24,7 +24,7 @@ ln -s /home/despoB/kaihwang/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_ta
 echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
 3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_Motor_base.nii.gz \
 -cio \
--set faces-scenes \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
+-set RH-LH \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
 
 cd /home/despoB/kaihwang/TRSE/TDSigEI/
 
@@ -65,7 +65,7 @@ ln -s /home/despoB/kaihwang/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_ta
 echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
 3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_Motor_deriv.nii.gz \
 -cio \
--set faces-scenes \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
+-set RH-LH \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
 
 cd /home/despoB/kaihwang/TRSE/TDSigEI/
 
