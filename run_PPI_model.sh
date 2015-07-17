@@ -5,7 +5,7 @@ WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 #503 505 508 509 511 512 513 516 517 518 519 523 527 529 530 532
 
-for s in 508; do
+for s in 509; do
 	cd ${WD}/${s}
 
 	#create condition stimtime
@@ -19,15 +19,18 @@ for s in 508; do
 	done
 
 	# normalize tissue masks to extract nuisance signal
-
+	fslreorient2std ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz
 	applywarp --ref=${WD}/${s}/MPRAGE/mprage_final.nii.gz \
+	--rel \
 	--interp=nn \
 	--in=${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz \
 	--warp=${WD}/${s}/MPRAGE/mprage_warpcoef.nii.gz \
 	-o ${WD}/${s}/CSF_orig.nii.gz
 	3dmask_tool -prefix ${WD}/${s}/CSF_erode.nii.gz -quiet -input ${WD}/${s}/CSF_orig.nii.gz -dilate_result -1
 
+	fslreorient2std ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz
 	applywarp --ref=${WD}/${s}/MPRAGE/mprage_final.nii.gz \
+	--rel \
 	--interp=nn \
 	--in=${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz \
 	--warp=${WD}/${s}/MPRAGE/mprage_warpcoef.nii.gz \
