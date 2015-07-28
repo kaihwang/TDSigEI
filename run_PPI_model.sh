@@ -95,7 +95,7 @@ for s in 509; do
 
 	#create censor
 	1d_tool.py -infile ${WD}/${s}/Motion_TD_runs.1D \
-	-set_nruns 8 -show_censor_count -censor_motion 0.5 ${s}_TD -censor_prev_TR -overwrite
+	-set_nruns 8 -show_censor_count -censor_motion 0.3 ${s}_TD -censor_prev_TR -overwrite
 
 	# create gPPI regressors for each condition
 	#for condition in FT FD HT FD; do

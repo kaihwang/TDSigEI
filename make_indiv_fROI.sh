@@ -5,29 +5,37 @@ WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 cd $WD
 
 
-#for FFA and PPA
-# for s in $(ls -d 5*); do
-# 	cd ${WD}/${s}/
+for FFA and PPA
+for s in $(ls -d 5*); do
+	cd ${WD}/${s}/
 
-# 	# fomd brik number with the face v house contrast
-# 	brik_num=$(3dinfo -verb Localizer_PPAFFA_stats_REML+tlrc | grep BaseFaces-Scenes#0_Tstat | grep -o '#[0-9][0-9]' | grep -Eo [0-9]{2})
+	# fomd brik number with the face v house contrast
+	brik_num=$(3dinfo -verb Localizer_PPAFFA_stats_REML+tlrc | grep BaseFaces-Scenes#0_Tstat | grep -o '#[0-9][0-9]' | grep -Eo [0-9]{2})
+	# extract contrast
+	3dTcat -prefix face_v_house_tstat Localizer_PPAFFA_stats_REML+tlrc[$brik_num]
 
-# 	# extract contrast
-# 	3dTcat -prefix face_v_house_tstat Localizer_PPAFFA_stats_REML+tlrc[$brik_num]
+	brik_num=$(3dinfo -verb Localizer_PPAFFA_stats_REML+tlrc | grep Faces#0_Tstat | grep -o '#[0-9][0-9]' | grep -Eo [0-9]{2})
+	# extract contrast
+	3dTcat -prefix face_tstat Localizer_PPAFFA_stats_REML+tlrc[$brik_num]
 
-# 	# creat individual FFA mask
-# 	3dcalc -a face_v_house_tstat+tlrc -b /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_FFA_mask.nii.gz \
-# 	-expr 'a*b' -short -prefix face_FFAmasked
-# 	3dmaxima -input face_FFAmasked+tlrc -min_dist 6 -spheres_1toN -out_rad 5 -prefix FFA_ROIs -thresh 1
-# 	3dcalc -a FFA_ROIs+tlrc -expr 'equals(a,1)' -prefix FFA_indiv_ROI
+	brik_num=$(3dinfo -verb Localizer_PPAFFA_stats_REML+tlrc | grep Scenes#0_Tstat | grep -o '#[0-9][0-9]' | grep -Eo [0-9]{2})
+	# extract contrast
+	3dTcat -prefix house_tstat Localizer_PPAFFA_stats_REML+tlrc[$brik_num]
 
-# 	# creat individual PPA mask
-# 	3dcalc -a face_v_house_tstat+tlrc -b /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_PPA_mask.nii.gz \
-# 	-expr 'a*b' -short -prefix house_PPAmasked
-# 	3dmaxima -input house_PPAmasked+tlrc -min_dist 6 -neg_ext -spheres_1toN -out_rad 5 -prefix PPA_ROIs -thresh -1
-# 	3dcalc -a PPA_ROIs+tlrc -expr 'equals(a,1)' -prefix PPA_indiv_ROI
 
-# done
+	# creat individual FFA mask
+	3dcalc -a face_tstat+tlrc -b /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_FFA_mask.nii.gz \
+	-expr 'a*b' -short -prefix face_FFAmasked
+	3dmaxima -input face_FFAmasked+tlrc -min_dist 6 -spheres_1toN -out_rad 5 -prefix FFA_ROIs -thresh 1
+	3dcalc -a FFA_ROIs+tlrc -expr 'equals(a,1)' -prefix FFA_indiv_ROI
+
+	# creat individual PPA mask
+	3dcalc -a house_tstat+tlrc -b /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_PPA_mask.nii.gz \
+	-expr 'a*b' -short -prefix house_PPAmasked
+	3dmaxima -input house_PPAmasked+tlrc -min_dist 6 -neg_ext -spheres_1toN -out_rad 5 -prefix PPA_ROIs -thresh -1
+	3dcalc -a PPA_ROIs+tlrc -expr 'equals(a,1)' -prefix PPA_indiv_ROI
+
+done
 
 
 cd $WD

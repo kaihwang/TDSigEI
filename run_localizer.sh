@@ -6,7 +6,7 @@ SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 
 #503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534 531
 
-for s in 510; do
+for s in 503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534 531; do
 	cd ${WD}/${s}
 
 	ln -s /home/despoB/kaihwang/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii \
@@ -28,11 +28,11 @@ for s in 510; do
 	cat $(ls ${WD}/${s}/Mapping_run*_motpar.1D | sort -V) > ${WD}/${s}/Motion_mapping_runs.1D
 
 	1d_tool.py -infile ${WD}/${s}/Motion_mapping_runs.1D \
-	-set_nruns 8 -show_censor_count -censor_motion 0.5 ${s}_mapping -censor_prev_TR -overwrite
+	-set_nruns 8 -show_censor_count -censor_motion 0.3 ${s}_mapping -censor_prev_TR -overwrite
 
 
 	3dDeconvolve -input $(ls ${WD}/${s}/Mapping_run*.nii.gz | sort -V) \
-	-mask ${WD}/ROIs/overlap.nii.gz \
+	-mask ${WD}/ROIs/100overlap_mask+tlrc \
 	-polort A \
 	-num_stimts 8 \
 	-censor ${s}_mapping_censor.1D \
@@ -59,7 +59,7 @@ for s in 510; do
 
 
 	3dDeconvolve -input $(ls ${WD}/${s}/Mapping_run*.nii.gz | sort -V) \
-	-mask ${WD}/ROIs/overlap.nii.gz \
+	-mask ${WD}/ROIs/100overlap_mask+tlrc \
 	-polort A \
 	-num_stimts 8 \
 	-censor ${s}_mapping_censor.1D \

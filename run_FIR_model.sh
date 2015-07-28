@@ -4,9 +4,9 @@
 WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 #503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534 531
+# 510
 
-
-for s in 510; do
+for s in 503 505 508 509 512 513 516 517 518 519 523 527 528 529 530 532 534 531; do
 	cd ${WD}/${s}
 
 
@@ -38,7 +38,7 @@ for s in 510; do
 		cat $(ls ${WD}/${s}/${condition}_run*_motpar.1D | sort -V) > ${WD}/${s}/Motion_${condition}_runs.1D
 
 		1d_tool.py -infile ${WD}/${s}/Motion_${condition}_runs.1D \
-		-set_nruns 4 -show_censor_count -censor_motion 0.5 ${s}_${condition} -censor_prev_TR -overwrite
+		-set_nruns 4 -show_censor_count -censor_motion 0.3 ${s}_${condition} -censor_prev_TR -overwrite
 
 		#run FIR model
 		3dDeconvolve -input $(ls ${WD}/${s}/${condition}_run*.nii.gz | sort -V) \
