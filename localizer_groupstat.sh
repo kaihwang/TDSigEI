@@ -14,7 +14,7 @@ for s in $(ls -d 5*); do
 	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Face_v_Scene_group_ana.sh
 done
 
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/overlap.nii.gz' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Face_v_Scene_group_ana.sh
+echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Face_v_Scene_group_ana.sh
 
 cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
 ln -s /home/despoB/kaihwang/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii template_brain.nii
@@ -33,7 +33,7 @@ for s in $(ls -d 5*); do
 	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
 done
 
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/overlap.nii.gz' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
+echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
 
 cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
 . Motor_group_ana.sh
@@ -55,7 +55,7 @@ for s in $(ls -d 5*); do
 	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Face_v_Scene_group_ana.sh
 done
 
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/overlap.nii.gz' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Face_v_Scene_group_ana.sh
+echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Face_v_Scene_group_ana.sh
 
 cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
 ln -s /home/despoB/kaihwang/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii template_brain.nii
@@ -74,7 +74,7 @@ for s in $(ls -d 5*); do
 	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
 done
 
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/overlap.nii.gz' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
+echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/Motor_group_ana.sh
 
 cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
 . Motor_group_ana.sh
