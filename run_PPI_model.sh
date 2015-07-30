@@ -5,7 +5,7 @@ WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 #503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534 531
 
-for s in 509; do
+for s in 503; do
 	cd ${WD}/${s}
 
 	#create condition stimtime
@@ -38,6 +38,9 @@ for s in 509; do
 	3dmask_tool -prefix ${WD}/${s}/WM_erode.nii.gz -quiet -input ${WD}/${s}/WM_orig.nii.gz -dilate_result -1
 
 	#extract ROI timeseries
+	rm CSF_TS_*.1D
+	rm WM_TS_*.1D
+
 	for run in $(cat ${SCRIPTS}/${s}_TD_runs); do
 		
 		if [ ! -e ${WD}/${s}/TD_run${run}.nii.gz ]; then
@@ -151,6 +154,7 @@ for s in 509; do
 
 	done
 
-
+mkdir 1Ds
+mv *.1D 1Ds
 
 done
