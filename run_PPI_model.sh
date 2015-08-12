@@ -51,13 +51,12 @@ for s in 503; do
 			ln -s ${WD}/${s}/run${run}/motion.par ${WD}/${s}/TD_run${run}_motpar.1D
 		fi
 		
-		# will have to create subject mask later, now just using group mask from TRSE
 		if [ ! -e ${WD}/${s}/FFA_TS_run${run}.1D ]; then
-			3dmaskave -quiet -mask ${WD}/ROIs/Group_FFA_mask.nii.gz ${WD}/${s}/TD_run${run}.nii.gz > ${WD}/${s}/FFA_TS_run${run}.1D
+			3dmaskave -quiet -mask ${WD}/${s}/FFA_indiv_ROI+tlrc ${WD}/${s}/TD_run${run}.nii.gz > ${WD}/${s}/FFA_TS_run${run}.1D
 		fi
 
 		if [ ! -e ${WD}/${s}/PPA_TS_run${run}.1D ]; then
-			3dmaskave -quiet -mask ${WD}/ROIs/Group_PPA_mask.nii.gz ${WD}/${s}/TD_run${run}.nii.gz > ${WD}/${s}/PPA_TS_run${run}.1D
+			3dmaskave -quiet -mask ${WD}/${s}/PPA_indiv_ROI+tlrc ${WD}/${s}/TD_run${run}.nii.gz > ${WD}/${s}/PPA_TS_run${run}.1D
 		fi
 
 		#nuisance signal
