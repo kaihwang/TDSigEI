@@ -18,7 +18,7 @@ Runs = ['run1', 'run2']
 
 
 TS_df = pd.DataFrame()
-for s in [503]:
+for s in Subjects:
 
 		for i, cond in enumerate(Conditions):
 			
@@ -27,6 +27,7 @@ for s in [503]:
 					
 					tmpdf = pd.DataFrame()
 					tmpdf['Time'] = np.arange(1,103)
+					tmpdf['Subject'] = s
 					tmpdf['Condition'] = cond
 					tmpdf['MotorMapping'] = m+1
 					tmpdf['Run'] = r+1
@@ -39,7 +40,7 @@ for s in [503]:
 					TS_df = TS_df.append(tmpdf,  ignore_index=True)
 
 os.chdir('/home/despoB/kaihwang/bin/TDSigEI/')
-#TS_df.to_csv('/home/despoB/kaihwang/bin/TDSigEI/Data/TS_df.csv')
+TS_df.to_csv('/home/despoB/kaihwang/bin/TDSigEI/Data/TS_df.csv')
 
 #groupedDF = FIR_df.groupby(['ROI','Condition','Volume'])
 #SEMdf = groupedDF.aggregate(scipy.stats.sem)
