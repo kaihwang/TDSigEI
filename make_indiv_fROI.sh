@@ -26,18 +26,22 @@ for s in $(ls -d 5*); do
 
 
 	# creat individual FFA mask
+	rm FFAmasked.nii.gz
 	3dcalc -a face_v_house_tstat+tlrc -b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_FFA_mask.nii.gz \
 	-c face_tstat+tlrc \
-	-expr '(ispositive((a*b)-1))*(ispositive(c-1))*a' -short -prefix FFAmasked
-	3dmaxima -input FFAmasked+tlrc -min_dist 6 -spheres_1toN -out_rad 2 -prefix FFA_ROIs -thresh 1
-	3dcalc -a FFA_ROIs+tlrc -b FFAmasked+tlrc -expr 'amongst(a,1)' -prefix FFA_indiv_ROI
+	-expr '(ispositive((a*b)))*(ispositive(c-1))*a' -short -prefix FFAmasked.nii.gz
+	fslmaths FFAmasked.nii.gz -thrP 90 FFA_indiv_ROI.nii.gz
+	#3dmaxima -input FFAmasked+tlrc -min_dist 6 -spheres_1toN -out_rad 2 -prefix FFA_ROIs -thresh 1
+	#3dcalc -a FFA_ROIs+tlrc -b FFAmasked+tlrc -expr 'amongst(a,1)' -prefix FFA_indiv_ROI
 
 	# creat individual PPA mask
+	rm PPAmasked.nii.gz
 	3dcalc -a face_v_house_tstat+tlrc -b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_PPA_mask.nii.gz \
 	-c house_tstat+tlrc \
-	-expr '(isnegative((a*b)+1))*(ispositive(c-1))*a' -short -prefix PPAmasked
-	3dmaxima -input PPAmasked+tlrc -min_dist 6 -spheres_1toN -out_rad 2 -prefix PPA_ROIs -neg_ext -thresh -1
-	3dcalc -a PPA_ROIs+tlrc -b PPAmasked+tlrc -expr 'amongst(a,1)' -prefix PPA_indiv_ROI
+	-expr '(isnegative((a*b)))*(ispositive(c-1))*a*(-1)' -short -prefix PPAmasked.nii.gz
+	fslmaths PPAmasked.nii.gz -thrP 90 PPA_indiv_ROI.nii.gz
+	#3dmaxima -input PPAmasked+tlrc -min_dist 6 -spheres_1toN -out_rad 2 -prefix PPA_ROIs -neg_ext -thresh -1
+	#3dcalc -a PPA_ROIs+tlrc -b PPAmasked+tlrc -expr 'amongst(a,1)' -prefix PPA_indiv_ROI
 	#-neg_ext is flag for sorting negative peaks
 done
 
