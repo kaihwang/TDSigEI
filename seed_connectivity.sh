@@ -7,7 +7,7 @@ SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 #503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534 531
 # 510
 
-for s in 503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534 531; do
+for s in 503; do
 	cd ${WD}/${s}
 
 
@@ -16,10 +16,10 @@ for s in 503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534
 		for ROI in FFA PPA; do
 
 			# extract seed signal
-			3dmaskSVD -mask ${ROI}_indiv_ROI.nii.gz -vnorm -polort 1 \
-			-input ${s}_FIR_${condition}_errts.nii.gz > ${ROI}_${condition}_seedTS.1D
+			3dmaskave -mask ${ROI}_indiv_ROI.nii.gz -q \
+			${s}_FIR_${condition}_errts.nii.gz > ${ROI}_${condition}_seedTS.1D
 
-
+			rm seedcon_${ROI}_${condition}_stats*
 			# run FIR + motor response model to extract residuals
 			3dDeconvolve -input ${s}_FIR_${condition}_errts.nii.gz \
 			-mask ${WD}/ROIs/100overlap_mask+tlrc \
@@ -34,6 +34,7 @@ for s in 503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534
 			-GOFORIT 100 \
 			-noFDR 
 
+			rm Corrcoef_seed${ROI}_${condition}*
 			3dcalc -a seedcon_${ROI}_${condition}_stats+tlrc[4] \
 			-b seedcon_${ROI}_${condition}_stats+tlrc[2] \
 			-expr 'ispositive(b)*sqrt(a)-isnegative(b)*sqrt(a)' \
