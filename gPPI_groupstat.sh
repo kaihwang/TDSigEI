@@ -1,102 +1,35 @@
 #!/bin/bash
-# script for group analysis of gPPI model
+# script for group analysis on gPPI 
+# note no between subject variables
 
-#FFA
-echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
-3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_gPPI_FFA_T.nii.gz \
--cio \
--set gPPI_FFA_T \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_T.sh
+#call 3dMVM
 
-cd /home/despoB/kaihwang/TRSE/TDSigEI/
+echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
+3dMVM -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/GroupStats_seed_connectivity.nii.gz \\
+-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc \\
+-bsVars 1 \\
+-wsMVT \\
+-wsVars 'SeedROI*Condition' \\
+-num_glt 3 \\
+-gltLabel 1 Target -gltCode 1 'Condition : 1*Target' \\
+-gltLabel 2 Distractor -gltCode 2 'Condition : 1*Distractor' \\
+-gltLabel 3 Target-Distractor -gltCode 3 'Condition : 1*Target -1*Distractor' \\" > /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_gPPI.sh
 
-for s in $(ls -d 5*); do
-	echo "$s /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_FFA_Full_model_stats_REML+tlrc[2] /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_FFA_Full_model_stats_REML+tlrc[3] \\" \
-	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_T.sh
-done
-
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_T.sh
-
-
-echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
-3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_gPPI_FFA_D.nii.gz \
--cio \
--set gPPI_FFA_D \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_D.sh
+echo 'Subj SeedROI Condition InputFile \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/anova_table.txt
 
 cd /home/despoB/kaihwang/TRSE/TDSigEI/
-
 for s in $(ls -d 5*); do
-	echo "$s /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_FFA_Full_model_stats_REML+tlrc[6] /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_FFA_Full_model_stats_REML+tlrc[7] \\" \
-	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_D.sh
+
+	echo "${s} FFA Target gPPI_FFA_Full_model_stats_REML+tlrc[2] \\
+${s} FFA Distractor gPPI_FFA_Full_model_stats_REML+tlrc[6] \\
+${s} PPA Target gPPI_PPA_Full_model_stats_REML+tlrc[2] \\
+${s} PPA Distractor gPPI_PPA_Full_model_stats_REML+tlrc[6] \\"  >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/anova_table.txt
+	
 done
 
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_D.sh
+echo '-dataTable @/home/despoB/kaihwang/TRSE/TDSigEI/Group/anova_table.txt' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_gPPI.sh
 
-echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
-3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_gPPI_FFA_TvD.nii.gz \
--cio \
--set gPPI_FFA_TvD \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_TvD.sh
-
-cd /home/despoB/kaihwang/TRSE/TDSigEI/
-
-for s in $(ls -d 5*); do
-	echo "$s /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_FFA_Full_model_stats_REML+tlrc[18] /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_FFA_Full_model_stats_REML+tlrc[19] \\" \
-	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_TvD.sh
-done
-
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_FFA_TvD.sh
+. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_gPPI.sh
 
 
 
-
-#PPA
-echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
-3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_gPPI_PPA_T.nii.gz \
--cio \
--set gPPI_PPA_T \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_T.sh
-
-cd /home/despoB/kaihwang/TRSE/TDSigEI/
-
-for s in $(ls -d 5*); do
-	echo "$s /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_PPA_Full_model_stats_REML+tlrc[2] /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_PPA_Full_model_stats_REML+tlrc[3] \\" \
-	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_T.sh
-done
-
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_T.sh
-
-
-echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
-3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_gPPI_PPA_D.nii.gz \
--cio \
--set gPPI_PPA_D \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_D.sh
-
-cd /home/despoB/kaihwang/TRSE/TDSigEI/
-
-for s in $(ls -d 5*); do
-	echo "$s /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_PPA_Full_model_stats_REML+tlrc[6] /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_PPA_Full_model_stats_REML+tlrc[7] \\" \
-	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_D.sh
-done
-
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_D.sh
-
-echo 'cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
-3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_gPPI_PPA_TvD.nii.gz \
--cio \
--set gPPI_PPA_TvD \' > /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_TvD.sh
-
-cd /home/despoB/kaihwang/TRSE/TDSigEI/
-
-for s in $(ls -d 5*); do
-	echo "$s /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_PPA_Full_model_stats_REML+tlrc[18] /home/despoB/kaihwang/TRSE/TDSigEI/$s/gPPI_PPA_Full_model_stats_REML+tlrc[19] \\" \
-	>> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_TvD.sh
-done
-
-echo '-mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/100overlap_mask+tlrc' >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/gPPI_PPA_TvD.sh
-
-
-cd /home/despoB/kaihwang/TRSE/TDSigEI/Group
-qsub -V gPPI_PPA_D.sh
-qsub -V gPPI_PPA_T.sh
-qsub -V gPPI_PPA_TvD.sh
-qsub -V gPPI_FFA_D.sh
-qsub -V gPPI_FFA_T.sh
-qsub -V gPPI_FFA_TvD.sh
