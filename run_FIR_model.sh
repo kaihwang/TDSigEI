@@ -8,7 +8,9 @@ SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 
 for s in 503; do
 	cd ${WD}/${s}
-
+	rm *FIR*
+	rm *nusiance*
+	
 	# normalize tissue masks to extract nuisance signal
 	fslreorient2std ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz
 	applywarp --ref=${WD}/${s}/MPRAGE/mprage_final.nii.gz \
@@ -17,6 +19,7 @@ for s in 503; do
 	--in=${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz \
 	--warp=${WD}/${s}/MPRAGE/mprage_warpcoef.nii.gz \
 	-o ${WD}/${s}/CSF_orig.nii.gz
+	rm ${WD}/${s}/CSF_erode.nii.gz
 	3dmask_tool -prefix ${WD}/${s}/CSF_erode.nii.gz -quiet -input ${WD}/${s}/CSF_orig.nii.gz -dilate_result -1
 
 	fslreorient2std ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz
@@ -26,6 +29,7 @@ for s in 503; do
 	--in=${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz \
 	--warp=${WD}/${s}/MPRAGE/mprage_warpcoef.nii.gz \
 	-o ${WD}/${s}/WM_orig.nii.gz	
+	rm ${WD}/${s}/WM_erode.nii.gz
 	3dmask_tool -prefix ${WD}/${s}/WM_erode.nii.gz -quiet -input ${WD}/${s}/WM_orig.nii.gz -dilate_result -1
 
 	#extract runs for each condition: FH, HF, Fo, Ho, Fp, Hp
@@ -55,7 +59,7 @@ for s in 503; do
 			#nuisance tissue signal
 			3dmaskave -quiet -mask ${WD}/${s}/CSF_erode.nii.gz ${WD}/${s}/${condition}_run${run}.nii.gz > ${WD}/${s}/CSF_TS_${condition}_run${run}.1D
 			3dmaskave -quiet -mask ${WD}/${s}/WM_erode.nii.gz ${WD}/${s}/${condition}_run${run}.nii.gz > ${WD}/${s}/WM_TS_${condition}_run${run}.1D
-			
+			3dmaskave -quiet -mask ${WD}/${s}/subject_mask.nii.gz ${WD}/${s}/${condition}_run${run}.nii.gz > ${WD}/${s}/GS_TS_${condition}_run${run}.1D
 
 		done
 
@@ -65,52 +69,54 @@ for s in 503; do
 		1d_tool.py -infile ${WD}/${s}/Motion_${condition}_runs.1D \
 		-set_nruns 4 -show_censor_count -censor_motion 0.3 ${s}_${condition} -censor_prev_TR -overwrite
 
-		#csf and WM
+		#tissue regressors
 		cat $(ls ${WD}/${s}/CSF_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegCSF_${condition}_TS.1D
 		cat $(ls ${WD}/${s}/WM_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegWM_${condition}_TS.1D
+		cat $(ls ${WD}/${s}/GS_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegGS_${condition}_TS.1D
 
-		#run FIR model
+		#run "nuisance model"
 		3dDeconvolve -input $(ls ${WD}/${s}/${condition}_run*.nii.gz | sort -V) \
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
 		-num_stimts 9 \
 		-censor ${WD}/${s}/${s}_${condition}_censor.1D \
+		-stim_file 1 ${WD}/${s}/RegGS_${condition}_TS.1D -stim_label 1 GS \
+		-stim_file 2 ${WD}/${s}/Motion_${condition}_runs.1D[0] -stim_label 2 motpar1 \
+		-stim_file 3 ${WD}/${s}/Motion_${condition}_runs.1D[1] -stim_label 3 motpar2 \
+		-stim_file 4 ${WD}/${s}/Motion_${condition}_runs.1D[2] -stim_label 4 motpar3 \
+		-stim_file 5 ${WD}/${s}/Motion_${condition}_runs.1D[3] -stim_label 5 motpar4 \
+		-stim_file 6 ${WD}/${s}/Motion_${condition}_runs.1D[4] -stim_label 6 motpar5 \
+		-stim_file 7 ${WD}/${s}/Motion_${condition}_runs.1D[5] -stim_label 7 motpar6 \
+		-stim_file 8 ${WD}/${s}/RegCSF_${condition}_TS.1D -stim_label 8 CSF \
+		-stim_file 9 ${WD}/${s}/RegWM_${condition}_TS.1D -stim_label 9 WM \
+		-nobucket \
+		-GOFORIT 100 \
+		-noFDR \
+		-errts ${s}_nusiance_${condition}_errts.nii.gz \
+		-allzero_OK
+
+
+		#-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
+		# -iresp 1 ${condition}_FIR \
+		# -rout \
+		# -bucket FIR_${condition}_stats \
+		# -x1D FIR_${condition}_design_mat \
+		# -GOFORIT 100\
+		# -noFDR \
+		# -allzero_OK
+
+		# run FIR model
+		3dDeconvolve -input ${s}_nusiance_${condition}_errts.nii.gz \
+		-concat '1D: 0 102 204 306' \
+		-mask ${WD}/ROIs/100overlap_mask+tlrc \
+		-polort A \
+		-num_stimts 1 \
+		-censor ${WD}/${s}/${s}_${condition}_censor.1D \
 		-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
-		-stim_file 2 ${WD}/${s}/Motion_${condition}_runs.1D[0] -stim_label 2 motpar1 -stim_base 2 \
-		-stim_file 3 ${WD}/${s}/Motion_${condition}_runs.1D[1] -stim_label 3 motpar2 -stim_base 3 \
-		-stim_file 4 ${WD}/${s}/Motion_${condition}_runs.1D[2] -stim_label 4 motpar3 -stim_base 4 \
-		-stim_file 5 ${WD}/${s}/Motion_${condition}_runs.1D[3] -stim_label 5 motpar4 -stim_base 5 \
-		-stim_file 6 ${WD}/${s}/Motion_${condition}_runs.1D[4] -stim_label 6 motpar5 -stim_base 6 \
-		-stim_file 7 ${WD}/${s}/Motion_${condition}_runs.1D[5] -stim_label 7 motpar6 -stim_base 7 \
-		-stim_file 8 ${WD}/${s}/RegCSF_${condition}_TS.1D -stim_label 8 CSF -stim_base 8 \
-		-stim_file 9 ${WD}/${s}/RegWM_${condition}_TS.1D -stim_label 9 WM -stim_base 9 \
 		-iresp 1 ${condition}_FIR \
 		-rout \
 		-bucket FIR_${condition}_stats \
 		-x1D FIR_${condition}_design_mat \
-		-GOFORIT 100\
-		-noFDR \
-		-allzero_OK 
-
-		# run FIR + motor response model to extract residuals
-		3dDeconvolve -input $(ls ${WD}/${s}/${condition}_run*.nii.gz | sort -V) \
-		-mask ${WD}/ROIs/100overlap_mask+tlrc \
-		-polort A \
-		-num_stimts 11 \
-		-censor ${WD}/${s}/${s}_${condition}_censor.1D \
-		-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
-		-stim_times 2 ${WD}/${s}/${condition}_RH.1D 'TENT(0, 16.5, 11)' -stim_label 2 RH \
-		-stim_times 3 ${WD}/${s}/${condition}_LH.1D 'TENT(0, 16.5, 11)' -stim_label 3 LH \
-		-stim_file 4 ${WD}/${s}/Motion_${condition}_runs.1D[0] -stim_label 4 motpar1 -stim_base 4 \
-		-stim_file 5 ${WD}/${s}/Motion_${condition}_runs.1D[1] -stim_label 5 motpar2 -stim_base 5 \
-		-stim_file 6 ${WD}/${s}/Motion_${condition}_runs.1D[2] -stim_label 6 motpar3 -stim_base 6 \
-		-stim_file 7 ${WD}/${s}/Motion_${condition}_runs.1D[3] -stim_label 7 motpar4 -stim_base 7 \
-		-stim_file 8 ${WD}/${s}/Motion_${condition}_runs.1D[4] -stim_label 8 motpar5 -stim_base 8 \
-		-stim_file 9 ${WD}/${s}/Motion_${condition}_runs.1D[5] -stim_label 9 motpar6 -stim_base 9 \
-		-stim_file 10 ${WD}/${s}/RegCSF_${condition}_TS.1D -stim_label 10 CSF -stim_base 10 \
-		-stim_file 11 ${WD}/${s}/RegWM_${condition}_TS.1D -stim_label 11 WM -stim_base 11 \
-		-nobucket \
-		-x1D FIR_and_Motor_${condition}_design_mat \
 		-GOFORIT 100\
 		-noFDR \
 		-errts ${s}_FIR_${condition}_errts.nii.gz \

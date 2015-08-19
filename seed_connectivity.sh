@@ -19,6 +19,9 @@ for s in 503; do
 			3dmaskave -mask ${ROI}_indiv_ROI.nii.gz -q \
 			${s}_FIR_${condition}_errts.nii.gz > ${ROI}_${condition}_seedTS.1D
 
+			#3dmaskave -q -mask subject_mask.nii.gz \
+			#${s}_FIR_${condition}_errts.nii.gz > gs.1D
+
 			rm seedcon_${ROI}_${condition}_stats*
 			# run FIR + motor response model to extract residuals
 			3dDeconvolve -input ${s}_FIR_${condition}_errts.nii.gz \

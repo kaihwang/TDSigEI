@@ -22,8 +22,8 @@ for s in 503; do
 				r=1
 				for run in $(cat ${SCRIPT}/${s}tmp | grep -n "${condition},${motormapping}" | cut -f1 -d:); do
 					#3dmaskave -q -mask subject_mask.nii.gz ${s}_FIR_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > gs.1D
-					3dmaskSVD -mask ${ROI}masked.nii.gz -vnorm -polort 2 \
-					-input ${s}_FIR_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > ${WD}/SC_1Ds/${s}_${ROI}_${condition}_motor${motormapping}_run${r}.1D
+					3dmaskave -mask ${ROI}_indiv_ROI.nii.gz -q \
+					${s}_FIR_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > ${WD}/SC_1Ds/${s}_${ROI}_${condition}_motor${motormapping}_run${r}.1D
 					r=$(($r+1))
 				done
 

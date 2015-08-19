@@ -13,11 +13,11 @@ for s in $(ls -d 5*); do
 	ln -s run1/subject_mask.nii.gz subject_mask.nii.gz
 	3dcalc -a subject_mask.nii.gz -b WM_orig.nii.gz -c CSF_orig.nii.gz -expr 'ispositive(a-b-c)' -prefix lib_GM_mask.nii.gz
 
-
-	# fomd brik number with the face v house contrast
-	#brik_num=$(3dinfo -verb Localizer_PPAFFA_stats_REML+tlrc | grep BaseFaces-Scenes#0_Tstat | grep -o '#[0-9][0-9]' | grep -Eo [0-9]{2})
+	rm face_v_house_tstat*
+	#find brik number with the face v house contrast
+	brik_num=$(3dinfo -verb Localizer_PPAFFA_stats_REML+tlrc | grep BaseFaces-Scenes#0_Tstat | grep -o '#[0-9][0-9]' | grep -Eo [0-9]{2})
 	# extract contrast
-	#3dTcat -prefix face_v_house_tstat Localizer_PPAFFA_stats_REML+tlrc[$brik_num]
+	3dTcat -prefix face_v_house_tstat Localizer_PPAFFA_stats_REML+tlrc[$brik_num]
 
 	#brik_num=3 
 	#$(3dinfo -verb Localizer_PPAFFA_stats_REML+tlrc | grep Faces#0_Tstat | grep -o '#[0-9][0-9]' | grep -Eo [0-9]{2})
