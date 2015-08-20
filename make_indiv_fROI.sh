@@ -10,6 +10,7 @@ for s in $(ls -d 5*); do
 	cd ${WD}/${s}/
 
 	rm lib_GM_mask.nii.gz
+	rm subject_mask.nii.gz
 	ln -s run1/subject_mask.nii.gz subject_mask.nii.gz
 	3dcalc -a subject_mask.nii.gz -b WM_orig.nii.gz -c CSF_orig.nii.gz -expr 'ispositive(a-b-c)' -prefix lib_GM_mask.nii.gz
 
@@ -68,6 +69,7 @@ done
 
 cd $WD
 
+# for motor
 for s in $(ls -d 5*); do
 	cd ${WD}/${s}/
 

@@ -9,7 +9,7 @@ from ggplot import *
 
 #os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI')
 #Subjects = glob.glob('5*')
-Subjects = [503, 505, 508, 509, 531, 512, 513, 516, 517, 518, 519, 523, 527, 528, 529, 530, 532, 534]
+Subjects = [503, 505, 508, 509, 510, 531, 512, 513, 516, 517, 518, 519, 523, 527, 528, 529, 530, 532, 534]
 
 ROIs = ['FFA', 'PPA', 'RH', 'LH']
 Conditions = ['FH', 'Fo', 'Fp', 'HF', 'Ho', 'Hp']
