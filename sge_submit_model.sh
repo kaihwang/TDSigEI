@@ -16,7 +16,10 @@ for Subject in $(ls -d 5*); do
 	# fi	
 
 	#if [ ! -e ${WD}/${Subject}/${Subject}_FIR_Hp_errts.nii.gz ]; then
-	sed "s/s in 503/s in ${Subject}/g" < ${SCRIPTS}/run_sc_motor_model.sh> ~/tmp/rsmm_${Subject}.sh
-	qsub -l mem_free=5G -V -M kaihwang -m e -e ~/tmp -o ~/tmp ~/tmp/rsmm_${Subject}.sh
+	# sed "s/s in 503/s in ${Subject}/g" < ${SCRIPTS}/run_sc_motor_model.sh> ~/tmp/rsmm_${Subject}.sh
+	# qsub -l mem_free=5G -V -M kaihwang -m e -e ~/tmp -o ~/tmp ~/tmp/rsmm_${Subject}.sh
+
+	sed "s/s in 503/s in ${Subject}/g" < ${SCRIPTS}/run_sc_model.sh> ~/tmp/rsm_${Subject}.sh
+	qsub -l mem_free=5G -V -M kaihwang -m e -e ~/tmp -o ~/tmp ~/tmp/rsm_${Subject}.sh
 	#fi	
 done
