@@ -11,6 +11,7 @@ for s in 503; do
 
 	rm Localizer_Motor*
 	rm Localizer_PPAFFA*
+	rm *Mapping*
 
 	# normalize tissue masks to extract nuisance signal
 	fslreorient2std ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz

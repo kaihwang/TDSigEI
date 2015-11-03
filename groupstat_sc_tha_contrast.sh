@@ -39,7 +39,7 @@ done
 
 #vis
 
-for condition in TD D; do
+for condition in TD D To P; do
 
 	if [ "$condition" == "TD" ]; then
 		cond1=FH
@@ -49,6 +49,16 @@ for condition in TD D; do
 	if [ "$condition" == "D" ]; then
 		cond1=HF
 		cond2=FH
+	fi
+
+	if [ "$condition" == "To" ]; then
+		cond1=Fo
+		cond2=Ho
+	fi
+
+	if [ "$condition" == "P" ]; then
+		cond1=Fp
+		cond2=Hp
 	fi
 
 	echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 

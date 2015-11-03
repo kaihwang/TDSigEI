@@ -47,8 +47,6 @@ echo '-bucket GroupStats_motor_sc.nii.gz' >> /home/despoB/kaihwang/TRSE/TDSigEI/
 
 
 #vis
-
-#motor
 echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
 3dANOVA3 -type 4 \\
 -alevels 2 \\

@@ -8,9 +8,9 @@ import os.path
 
 #parse block order
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI')
-Subjects = glob.glob('5*')
+#Subjects = glob.glob('5*')
 #Subjects =[503, 505, 508, 509, 512, 513, 516, 517, 518, 523, 527]
-
+Subjects = [503]
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI/Scripts/Logs')
 
 for s in Subjects:
@@ -391,7 +391,7 @@ for s in Subjects:
 			if block_df.loc[tr,'Condition'] in ('Ho'):	
 				House_block_trials.append(block_df.loc[tr,'OnsetTime'])
 
-			if block_df.loc[tr,'RH'] and block_df.loc[tr,'Condition'] in ('Fo', 'Hp'):
+			if block_df.loc[tr,'RH'] and block_df.loc[tr,'Condition'] in ('Fo', 'Ho'):
 				RH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])  						
 			
 			if block_df.loc[tr,'LH'] and block_df.loc[tr,'Condition'] in ('Fo', 'Ho'):
