@@ -34,7 +34,7 @@ for s in Subjects:
 		run_order[['Condition','MotorMapping']].to_csv(fn, index=None, header=None, )
 	
 	#write out mapping runs
-	mapping_runs = run_order[(run_order['Condition'] == 'Hp') | (run_order['Condition'] == 'Fp')]['Block'].values
+	mapping_runs = run_order[(run_order['Condition'] == 'Ho') | (run_order['Condition'] == 'Fo')]['Block'].values
 	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_mapping_runs' %s
 	if os.path.isfile(fn) is False:			
 		np.savetxt(fn, mapping_runs, fmt='%2d')
@@ -165,7 +165,7 @@ for s in Subjects:
 		f.close()					
 
 
-	#create TD stimulus timing for gPPI analysis
+	## create TD stimulus timing for gPPI analysis
 	# FT: face as target
 	# FD: face as distractor
 	# HT: house as target
@@ -280,7 +280,7 @@ for s in Subjects:
 	
 
 
-	#create To stimulus timing for gPPI analysis
+	## create To stimulus timing for gPPI analysis
 	# Fo: Face only, no distractor
 	# Ho: House only
 	To_Fo_stimtime = [['*']*8] #8 runs of To conditions
@@ -367,7 +367,8 @@ for s in Subjects:
 
 
 
-	#create localizer regressors
+	# create localizer regressors
+	# previous this was done using the passive view blocks, but since those are now used as basline. Will use the Target only runs
 	# using the mapping runs, get trial timing whenever a face or a house was presented.
 	# get trial timing whenever a button was pressed. 
 	Face_stimtime = [['*']*8] #8 runs of FP HP 
@@ -384,16 +385,16 @@ for s in Subjects:
 		
 		for tr in np.arange(0, len(block_df)):
 			
-			if block_df.loc[tr,'Condition'] in ('Fp'):
+			if block_df.loc[tr,'Condition'] in ('Fo'):
 				Face_block_trials.append(block_df.loc[tr,'OnsetTime'])
 
-			if block_df.loc[tr,'Condition'] in ('Hp'):	
+			if block_df.loc[tr,'Condition'] in ('Ho'):	
 				House_block_trials.append(block_df.loc[tr,'OnsetTime'])
 
-			if block_df.loc[tr,'RH'] and block_df.loc[tr,'Condition'] in ('Fp', 'Hp'):
+			if block_df.loc[tr,'RH'] and block_df.loc[tr,'Condition'] in ('Fo', 'Hp'):
 				RH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])  						
 			
-			if block_df.loc[tr,'LH'] and block_df.loc[tr,'Condition'] in ('Fp', 'Hp'):
+			if block_df.loc[tr,'LH'] and block_df.loc[tr,'Condition'] in ('Fo', 'Ho'):
 				LH_block_trials.append(block_df.loc[tr,'OnsetTime'] + block_df.loc[tr,'RT'])
 
 		if any(Face_block_trials):
