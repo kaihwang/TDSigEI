@@ -9,17 +9,20 @@ import os.path
 #parse block order
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI')
 #Subjects = glob.glob('5*')
-#Subjects =[503, 505, 508, 509, 512, 513, 516, 517, 518, 523, 527]
-Subjects = [503]
+Subjects =[503, 505, 508, 509, 510, 512, 513, 516, 517, 518, 519, 523, 527, 528, 529, 530, 532, 534, 531, 536, 539, 537, 546]
+#Subjects = [503]
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI/Scripts/Logs')
 
 for s in Subjects:
 
 	fn = '/home/despoB/TRSEPPI/TDSigEI/Scripts/%s_run_order' %s
 	
-	filestring = 'fMRI_Data_%s*.txt' %s
-	timing_logs = glob.glob(filestring) #files to be loaded
+	timing_logs = []
+	for ses in [4,3,2,1]:
+		filestring = 'fMRI_Data_%s_session%s*.txt' %(s, ses)
+		timing_logs.append(glob.glob(filestring)[0]) #files to be loaded
 
+	print(timing_logs)
 	#load timing logs and concat into a pandas dataframe
 	df = pd.read_table(timing_logs[3], header= None).append(pd.read_table(timing_logs[2], header= None)).append(pd.read_table(timing_logs[1],header= None)).append(pd.read_table(timing_logs[0], header= None))
 	# give each column a name.
