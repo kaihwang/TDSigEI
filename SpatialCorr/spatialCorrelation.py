@@ -113,18 +113,18 @@ for subj in subjects:
     repEnhanceArr1 = np.zeros(FH_ffaT.shape[1])
     repSuppArr1 = np.zeros(FH_ffaT.shape[1])
     for i in range(FH_ffaT.shape[1]):
-        repEnhanceArr1[i] = corrFunc2(FH_ffaT[:,i], Fo_ffa, Fp_ffa)[0]
-        repSuppArr1[i] = corrFunc2(HF_ffaT[:, i], Fo_ffa, Fp_ffa)[0]
+        repEnhanceArr1[i] = corrFunc2(FH_ffaT[:,i], Fp_ffa, Fo_ffa)[0]
+        repSuppArr1[i] = corrFunc2(HF_ffaT[:, i], Fp_ffa, Fo_ffa)[0]
     repEnhanceArrFFA[subjNum, :] = repEnhanceArr1
     repSuppArrFFA[subjNum, :] = repSuppArr1
-    print('Measure 4a: Time series pattern enhancement/suppression for FFa')
+    print('Measure 4a: Time series pattern enhancement/suppression for FFA')
 
     # Measure 4b: Time series correlation coefficient for PPA
     repEnhanceArr2 = np.zeros(FH_ppaT.shape[1])
     repSuppArr2 = np.zeros(FH_ppaT.shape[1])
     for i in range(FH_ppaT.shape[1]):
-        repEnhanceArr2[i] = corrFunc2(HF_ppaT[:,i], Ho_ppa, Hp_ppa)[0]
-        repSuppArr2[i] = corrFunc2(FH_ppaT[:, i], Ho_ppa, Hp_ppa)[0]
+        repEnhanceArr2[i] = corrFunc2(HF_ppaT[:,i], Hp_ppa, Ho_ppa)[0]
+        repSuppArr2[i] = corrFunc2(FH_ppaT[:, i], Hp_ppa, Ho_ppa)[0]
     repEnhanceArrPPA[subjNum, :] = repEnhanceArr2
     repSuppArrPPA[subjNum, :] = repSuppArr2
     print('Measure 4b: Time series pattern enhancement/suppression for PPA')
