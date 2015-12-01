@@ -34,7 +34,8 @@ for s in 539; do
 	rm ${WD}/${s}/WM_erode.nii.gz
 	3dmask_tool -prefix ${WD}/${s}/WM_erode.nii.gz -quiet -input ${WD}/${s}/WM_orig.nii.gz -dilate_result -1
 
-
+	ln -s ${WD}/${s}/run1/subject_mask.nii.gz ${WD}/${s}/subject_mask.nii.gz
+	
 	if [ ! -e ${WD}/${s}/template_brain.nii ]; then
 		ln -s /home/despoB/kaihwang/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii \
 		template_brain.nii
