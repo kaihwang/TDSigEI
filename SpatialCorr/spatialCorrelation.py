@@ -38,17 +38,24 @@ for i, subj in enumerate(subjects):
     else:
         print('Skipping afni to nifti file conversion...')
     fn = 'FIR_FH_T_FEFremoved.nii.gz'
-    FH_beta = nib.load(fn).get_data()
+    FH_beta_pReg = nib.load(fn).get_data()
     fn = 'FIR_HF_T_FEFremoved.nii.gz'
-    HF_beta = nib.load(fn).get_data()
+    HF_beta_pReg = nib.load(fn).get_data()
     fn = 'FIR_Fo_T_FEFremoved.nii.gz'
-    Fo_beta = nib.load(fn).get_data()
+    Fo_beta_pReg = nib.load(fn).get_data()
     fn = 'FIR_Ho_T_FEFremoved.nii.gz'
-    Ho_beta = nib.load(fn).get_data()
+    Ho_beta_pReg = nib.load(fn).get_data()
     fn = 'FIR_Fp_T_FEFremoved.nii.gz'
-    Fp_beta = nib.load(fn).get_data()
+    Fp_beta_pReg = nib.load(fn).get_data()
     fn = 'FIR_Hp_T_FEFremoved.nii.gz'
-    Hp_beta = nib.load(fn).get_data()
+    Hp_beta_pReg = nib.load(fn).get_data()
+
+    FH_beta = nib.load(dataPath + subj + '/FIR_FH.nii.gz')
+    HF_beta = nib.load(dataPath + subj + '/FIR_HF.nii.gz')
+    Fo_beta = nib.load(dataPath + subj + '/FIR_Fo.nii.gz')
+    Ho_beta = nib.load(dataPath + subj + '/FIR_Ho.nii.gz')
+    Fp_beta = nib.load(dataPath + subj + '/FIR_Fp.nii.gz')
+    Hp_beta = nib.load(dataPath + subj + '/FIR_Fp.nii.gz')
 
     ffa = nib.load(dataPath + subj + '/FFA_indiv_ROI.nii.gz').get_data()
     ppa = nib.load(dataPath + subj + '/PPA_indiv_ROI.nii.gz').get_data()
