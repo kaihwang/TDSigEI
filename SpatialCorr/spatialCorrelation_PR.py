@@ -6,7 +6,7 @@ import pandas as pd
 
 dataPath = '/home/despoB/kaihwang/TRSE/TDSigEI/'
 dataPath2 = '/home/despoB/akshayj/TDSigEI/SpatialCorr/'
-subjects = ['503', '505', '508']#, '509', '510', '512', '513', '516', '517', '518', '519', '523', '527', '528', '529', '530', '531', '532', '534']
+subjects = ['503', '505', '508', '509', '510', '512', '513', '516', '517', '518', '519', '523', '527', '528', '529', '530', '531', '532', '534']
 #subjects = ['503']
 # blocks_to_keep = range(1,20) + range(28,47) + range(55,74) + range(82,101) \
 # + range(1+102,20+102) + range(28+102,47+102) + range(55+102,74+102) + range(82+102,101+102) \
@@ -33,7 +33,7 @@ def computeCorrelation(beta_weights, masks):
     Fp_ffa = Fp_beta[ffa!=0].mean(1)
     HF_ffa = HF_beta[ffa!=0].mean(1)
     Hp_ffa = Hp_beta[ffa!=0].mean(1)
-    print
+
     Ho_ppa = Ho_beta[ppa!=0].mean(1)
     Fo_ppa = Fo_beta[ppa!=0].mean(1)
     FH_ppa = FH_beta[ppa!=0].mean(1)
