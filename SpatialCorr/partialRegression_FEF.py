@@ -12,8 +12,14 @@ dFEF_mask = nib.load(dataPath + 'ROIs/D_FEF.nii.gz').get_data() # 838 voxels
 
 conditions = ['FH', 'Fo', 'Fp', 'HF', 'Ho', 'Hp']
 
+mask = dFEF_mask
 for subj in subjects:
 	print '*************SUBJECT {0}*************'.format(subj)
+	for cond in conditions:
+		print '---Condition {0}---'.format(cond)
+		image  = nib.load(dataPath + subj + '/{0}_nusiance_{1}_errts.nii.gz'.format(subj, cond)).get_data()
+		image_mask = image[mask!=0]
+
 	# Load the functional data and apply the target and distractor FEF masks.
 	print 'Load the functional data and apply the masks'
 
@@ -43,20 +49,20 @@ for subj in subjects:
 -num_stimts 1  \
 -censor {2}{0}/1Ds/{0}_{1}_censor.1D \
 -stim_times 1 {2}{0}/1Ds/{1}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 {1}_FIR \
--ortvec {0}/{1}_t.1D T_FEF \
--iresp 1 {0}/{1}_FIR_T_FEFremoved \
+-ortvec {0}/{1}_d.1D D_FEF \
+-iresp 1 {0}/{1}_FIR_D_FEFremoved \
 -rout \
--bucket {0}/FIR_{1}_stats_T_FEFremoved \
--x1D {0}/FIR_{1}_design_mat_T_FEFremoved \
+-bucket {0}/FIR_{1}_stats_D_FEFremoved \
+-x1D {0}/FIR_{1}_design_mat_D_FEFremoved \
 -GOFORIT 100 \
 -noFDR \
--errts {0}/{0}_FIR_{1}_errts_T_FEFremoved.nii.gz \
+-errts {0}/{0}_FIR_{1}_errts_D_FEFremoved.nii.gz \
 -allzero_OK'''
 
 	for cond in conditions:
 		pca = PCA(n_components=20)
-		pca.fit(eval(cond + '_t'))
-		filename = '{0}_t.1D'.format(cond)
+		pca.fit(eval(cond + '_d'))
+		filename = '{0}_d.1D'.format(cond)
 		np.savetxt(subj + '/' + filename, pca.components_.transpose())
 		print('PCA components for {0} {1} saved!'.format(subj, cond))
 
