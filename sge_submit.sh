@@ -28,8 +28,11 @@ cd ${WD}
 
 for Subject in $(ls -d 5*); do
 
-	if [ "${Subject}" != "Raw" ] && [ ! -e ${WD}/${Subject}/MPRAGE/mprage_final.nii.gz ]; then
-		sed "s/s in P001/s in ${Subject}/g" < ${SCRIPTS}/proc_mprage.sh> /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
-		qsub -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
-	fi	
+	# if [ "${Subject}" != "Raw" ] && [ ! -e ${WD}/${Subject}/MPRAGE/mprage_final.nii.gz ]; then
+	# 	sed "s/s in P001/s in ${Subject}/g" < ${SCRIPTS}/proc_mprage.sh> /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
+	# 	qsub -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/tmp/proc_mprage_${Subject}.sh
+	# fi	
+
+	sed "s/s in 503/s in ${Subject}/g" < ${SCRIPTS}/run_fs.sh> /home/despoB/kaihwang/tmp/run_fs_${Subject}.sh
+	qsub -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/tmp/run_fs_${Subject}.sh
 done
