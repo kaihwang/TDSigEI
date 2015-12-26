@@ -6,7 +6,7 @@ SCRIPTS='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 #503 505 508 509 510 512 513 516 517 518 519 523 527 528 529 530 532 534 531
 # 510
 
-for s in 536; do
+for s in 503; do
 	cd ${WD}/${s}
 	rm *FIR*
 	rm *nusiance*
@@ -78,17 +78,15 @@ for s in 536; do
 		3dDeconvolve -input $(ls ${WD}/${s}/${condition}_run*.nii.gz | sort -V) \
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
-		-num_stimts 9 \
-		-censor ${WD}/${s}/${s}_${condition}_censor.1D \
-		-stim_file 1 ${WD}/${s}/RegGS_${condition}_TS.1D -stim_label 1 GS \
-		-stim_file 2 ${WD}/${s}/Motion_${condition}_runs.1D[0] -stim_label 2 motpar1 \
-		-stim_file 3 ${WD}/${s}/Motion_${condition}_runs.1D[1] -stim_label 3 motpar2 \
-		-stim_file 4 ${WD}/${s}/Motion_${condition}_runs.1D[2] -stim_label 4 motpar3 \
-		-stim_file 5 ${WD}/${s}/Motion_${condition}_runs.1D[3] -stim_label 5 motpar4 \
-		-stim_file 6 ${WD}/${s}/Motion_${condition}_runs.1D[4] -stim_label 6 motpar5 \
-		-stim_file 7 ${WD}/${s}/Motion_${condition}_runs.1D[5] -stim_label 7 motpar6 \
-		-stim_file 8 ${WD}/${s}/RegCSF_${condition}_TS.1D -stim_label 8 CSF \
-		-stim_file 9 ${WD}/${s}/RegWM_${condition}_TS.1D -stim_label 9 WM \
+		-num_stimts 8 \
+		-stim_file 1 ${WD}/${s}/Motion_${condition}_runs.1D[0] -stim_label 1 motpar1 \
+		-stim_file 2 ${WD}/${s}/Motion_${condition}_runs.1D[1] -stim_label 2 motpar2 \
+		-stim_file 3 ${WD}/${s}/Motion_${condition}_runs.1D[2] -stim_label 3 motpar3 \
+		-stim_file 4 ${WD}/${s}/Motion_${condition}_runs.1D[3] -stim_label 4 motpar4 \
+		-stim_file 5 ${WD}/${s}/Motion_${condition}_runs.1D[4] -stim_label 5 motpar5 \
+		-stim_file 6 ${WD}/${s}/Motion_${condition}_runs.1D[5] -stim_label 6 motpar6 \
+		-stim_file 7 ${WD}/${s}/RegCSF_${condition}_TS.1D -stim_label 7 CSF \
+		-stim_file 8 ${WD}/${s}/RegWM_${condition}_TS.1D -stim_label 8 WM \
 		-nobucket \
 		-GOFORIT 100 \
 		-noFDR \
@@ -111,7 +109,6 @@ for s in 536; do
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
 		-num_stimts 1 \
-		-censor ${WD}/${s}/${s}_${condition}_censor.1D \
 		-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
 		-iresp 1 ${condition}_FIR \
 		-rout \
