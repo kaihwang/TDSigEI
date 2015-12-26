@@ -16,7 +16,7 @@ for s in $(ls -d 5*); do
 	--warp=mprage_warpcoef.nii.gz \
 	-o aparc_aseg_mni.nii.gz
 
-	3dcalc -a aparc_aseg_mni.nii.gz -expr 'amongst(a,2013,1013)' -prefix ${WD}/${s}/primary_vis.nii.gz
+	3dcalc -a aparc_aseg_mni.nii.gz -expr 'amongst(a,2013,1013)' -prefix ${WD}/${s}/PrimVis_indiv_ROI.nii.gz
 
 done
 

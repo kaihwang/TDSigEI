@@ -10,7 +10,7 @@ import os.path
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI')
 #Subjects = glob.glob('5*')
 #Subjects =[503, 505, 508, 509, 510, 512, 513, 516, 517, 518, 519, 523, 527, 528, 529, 530, 532, 534, 531, 536, 539, 537, 546]
-Subjects = [545]
+Subjects = [505]
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI/Scripts/Logs')
 
 for s in Subjects:
