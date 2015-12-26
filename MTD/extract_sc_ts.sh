@@ -4,7 +4,7 @@
 
 WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 SCRIPT='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
-TRrange=(3..101 105..203 207..305 309..407)
+TRrange=(3..101 105..203 207..305 309..407) #skip initials
 
 cd $WD
 for s in 503; do
