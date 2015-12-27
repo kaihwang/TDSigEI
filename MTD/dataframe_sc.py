@@ -29,7 +29,7 @@ for dset in dsets:
 					for r, run in enumerate(Runs):
 						
 						tmpdf = pd.DataFrame()
-						tmpdf['Time'] = np.arange(1,103)
+						tmpdf['Time'] = np.arange(1,100)
 						tmpdf['Subject'] = s
 						tmpdf['Condition'] = cond
 						tmpdf['MotorMapping'] = m+1
