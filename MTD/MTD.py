@@ -6,6 +6,10 @@ def coupling(data,window):
         creates a functional coupling metric from 'data'
         data: should be organized in 'time x nodes' matrix
         smooth: smoothing parameter for dynamic coupling score
+
+        # from PD
+        #By default, the result is set to the right edge of the window. 
+        This can be changed to the center of the window by setting center=True.
     """
     
     #define variables
