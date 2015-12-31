@@ -50,10 +50,10 @@ for s in 503; do
 			# run model
 			for ROI in FFA PPA; do
 				3dDeconvolve \
-				-input /tmp/${s}/${dset}_Reg_${condition}_errts_run1.nii.gz[6..94] \
-				/tmp/${s}/${dset}_Reg_${condition}_errts_run2.nii.gz[6..94] \
-				/tmp/${s}/${dset}_Reg_${condition}_errts_run3.nii.gz[6..94] \
-				/tmp/${s}/${dset}_Reg_${condition}_errts_run4.nii.gz[6..94] \
+				-input /tmp/${s}/${dset}_Reg_${condition}_errts_run1.nii.gz[9..97] \
+				/tmp/${s}/${dset}_Reg_${condition}_errts_run2.nii.gz[9..97] \
+				/tmp/${s}/${dset}_Reg_${condition}_errts_run3.nii.gz[9..97] \
+				/tmp/${s}/${dset}_Reg_${condition}_errts_run4.nii.gz[9..97] \
 				-mask ${WD}/ROIs/100overlap_mask+tlrc \
 				-polort A \
 				-num_stimts 1 \
@@ -116,10 +116,10 @@ for s in 503; do
 			for cond in FFA-M FFA-NM PPA-M PPA-NM; do
 
 				3dDeconvolve \
-				-input /tmp/${s}/${dset}_Reg_${condition}_motor1_errts_run1.nii.gz[6..94] \
-				/tmp/${s}/${dset}_Reg_${condition}_motor1_errts_run2.nii.gz[6..94] \
-				/tmp/${s}/${dset}_Reg_${condition}_motor2_errts_run1.nii.gz[6..94] \
-				/tmp/${s}/${dset}_Reg_${condition}_motor2_errts_run2.nii.gz[6..94] \
+				-input /tmp/${s}/${dset}_Reg_${condition}_motor1_errts_run1.nii.gz[9..97] \
+				/tmp/${s}/${dset}_Reg_${condition}_motor1_errts_run2.nii.gz[9..97] \
+				/tmp/${s}/${dset}_Reg_${condition}_motor2_errts_run1.nii.gz[9..97] \
+				/tmp/${s}/${dset}_Reg_${condition}_motor2_errts_run2.nii.gz[9..97] \
 				-mask ${WD}/ROIs/100overlap_mask+tlrc \
 				-polort A \
 				-num_stimts 1 \
