@@ -53,3 +53,141 @@ for dset in nusianceReg FIRReg; do
 
 done
 
+
+#do vis-m coupling
+for dset in nusianceReg FIRReg; do
+	echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
+	3dANOVA3 -type 4 \\
+	-alevels 2 \\
+	-blevels 3 \\
+	-clevels 28 \\
+	-fa main_effect_roi \\
+	-fb main_effect_condition \\
+	-fab roi_x_condition \\
+	-bcontr 0 -1 1 D-P \\
+	-bcontr 1 0 -1 TD-D \\
+	-bcontr 1 -1 0 TD-P \\
+	-bcontr 1 0 0 TD \\
+	-bcontr 0 1 0 P \\
+	-bcontr 0 0 1 D \\" > /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_vis-M_${dset}.sh
+
+	cd /home/despoB/kaihwang/TRSE/TDSigEI/
+
+	n=1
+	for s in $(/bin/ls -d 5*); do
+		
+		r=1
+		for ROI in FFA; do
+			c=1
+			for condition in FH Fp HF; do
+				echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/MTD_${dset}_${condition}_${ROI}-M_stats+tlrc'[2]' \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_vis-M_${dset}.sh
+				c=$(($c+1))
+			done
+		done
+
+		r=2
+		for ROI in PPA; do
+			c=1
+			for condition in HF Hp FH; do
+				echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/MTD_${dset}_${condition}_${ROI}-M_stats+tlrc'[2]' \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_vis-M_${dset}.sh
+				c=$(($c+1))
+			done
+		done
+
+		n=$(($n+1))
+	done
+
+	echo "-bucket GroupStats_MTD_${dset}_vis-M.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_vis-M_${dset}.sh
+
+	. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_vis-M_${dset}.sh
+
+done
+
+
+#do vis-m coupling but contrast m v nm for TD
+for dset in nusianceReg FIRReg; do
+	echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
+	3dANOVA3 -type 4 \\
+	-alevels 2 \\
+	-blevels 3 \\
+	-clevels 28 \\
+	-fa main_effect_roi \\
+	-fb main_effect_condition \\
+	-fab roi_x_condition \\
+	-bcontr -1 1 M-NM \\" > /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_TD_vis-MvNM_${dset}.sh
+
+	cd /home/despoB/kaihwang/TRSE/TDSigEI/
+
+	n=1
+	for s in $(/bin/ls -d 5*); do
+		
+		r=1
+		for ROI in FFA; do
+			c=1
+			for condition in M NM; do
+				echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/MTD_${dset}_FH_${ROI}-${condition}_stats+tlrc'[2]' \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_TD_vis-MvNM_${dset}.sh
+				c=$(($c+1))
+			done
+		done
+
+		r=2
+		for ROI in PPA; do
+			c=1
+			for condition in M NM; do
+				echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/MTD_${dset}_HF_${ROI}-${condition}_stats+tlrc'[2]' \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_TD_vis-MvNM_${dset}.sh
+				c=$(($c+1))
+			done
+		done
+
+		n=$(($n+1))
+	done
+
+	echo "-bucket GroupStats_MTD_${dset}_TD_vis-MvNM.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_TD_vis-MvNM_${dset}.sh
+
+	. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_TD_vis-MvNM_${dset}.sh
+
+done
+
+#do vis-m coupling but contrast m v nm for D
+for dset in nusianceReg FIRReg; do
+	echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
+	3dANOVA3 -type 4 \\
+	-alevels 2 \\
+	-blevels 3 \\
+	-clevels 28 \\
+	-fa main_effect_roi \\
+	-fb main_effect_condition \\
+	-fab roi_x_condition \\
+	-bcontr -1 1 M-NM \\" > /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_D_vis-MvNM_${dset}.sh
+
+	cd /home/despoB/kaihwang/TRSE/TDSigEI/
+
+	n=1
+	for s in $(/bin/ls -d 5*); do
+		
+		r=1
+		for ROI in FFA; do
+			c=1
+			for condition in M NM; do
+				echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/MTD_${dset}_HF_${ROI}-${condition}_stats+tlrc'[2]' \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_D_vis-MvNM_${dset}.sh
+				c=$(($c+1))
+			done
+		done
+
+		r=2
+		for ROI in PPA; do
+			c=1
+			for condition in M NM; do
+				echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/MTD_${dset}_FH_${ROI}-${condition}_stats+tlrc'[2]' \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_D_vis-MvNM_${dset}.sh
+				c=$(($c+1))
+			done
+		done
+
+		n=$(($n+1))
+	done
+
+	echo "-bucket GroupStats_MTD_${dset}_D_vis-MvNM.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_D_vis-MvNM_${dset}.sh
+
+	. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_D_vis-MvNM_${dset}.sh
+
+done
