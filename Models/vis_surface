@@ -1,0 +1,16 @@
+import os
+from surfer import Brain, project_volume_data
+import numpy as np
+
+subject_id = "fsaverage"
+subjects_dir = os.environ["SUBJECTS_DIR"]
+
+brain = Brain("fsaverage", "rh", "inflated", views=['lat', 'med'], background="white")
+
+volume_file = "/Volumes/neuro/TRSE/TDSigEI/Group/to_vis2.nii.gz"
+
+reg_file = os.path.join(os.environ["FREESURFER_HOME"], "average/mni152.register.dat")
+zstat = project_volume_data(volume_file, "rh", reg_file, projmeth ='frac', smooth_fwhm=5, projarg=[0,1,0.01], projsum="max")
+zstat[zstat<0]=0
+brain.add_overlay(zstat, min=0.01, max=0.12)
+plt.rc('xtick', labelsize=20) 

@@ -12,4 +12,20 @@ for Subject in $(ls -d 5*); do
 
 	done
 
+	cd ${WD}/${Subject}/
+	mkdir MTDs
+	mv MTD* MTDs
+	
+
+	rm Corrcoef*_thareg*
+	mkdir SeedCorr
+	mv Corrcoef* SeedCorr
+
+	rm ${Subject}_RH*
+	rm ${Subject}_LH*
+
+	mkdir 1Ds
+	mv *.1D 1Ds
+	mv *.txt 1Ds
+	
 done
