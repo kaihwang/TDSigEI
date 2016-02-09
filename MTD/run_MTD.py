@@ -56,7 +56,10 @@ a, b, fn = raw_input().split()
 
 TS1 = np.loadtxt(a)
 TS2 = np.loadtxt(b)
-MTD = coupling(np.array([TS1, TS2]).T, 10)[1][:,0,1]
+MTD = coupling(np.array([TS1, TS2]).T, 9)[1][:,0,1]
+MTD[0:9] = 0;
+MTD = np.insert(MTD,0,0) #insert 0 to the first element because its temporal diff
+shifted_MTD = np.concatenate((np.array([0,0,0]),MTD[8:],np.array([0,0,0,0,0])))
 
 #print MTD[9:]
-np.savetxt(fn, MTD[9:])
+np.savetxt(fn, shifted_MTD)
