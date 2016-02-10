@@ -14,7 +14,7 @@ for s in 503; do
 	cd /tmp/${s}/
 
 	#repeat for two different datasets
-	for dset in nusiance; do #FIR 
+	for dset in nusiance FIR; do #FIR 
 
 		for condition in FH Fo Fp HF Ho Hp; do  # Fo Fp HF Ho Hp
 
@@ -31,7 +31,7 @@ for s in 503; do
 				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
 				${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D
 
-				3dmaskave -mask ${WD}/${s}/PrimVis_indiv_ROI.nii.gz -q \
+				3dmaskave -mask ${WD}/${s}/V2_indiv_ROI.nii.gz -q \
 				${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
 
 				echo "/tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_run${run}_VC-FFA.1D" | python ${MTD}/run_MTD.py
@@ -132,10 +132,18 @@ for s in 503; do
 		-tout \
 		-bucket /tmp/${s}/${dset}_MTD_BC_stats \
 		-GOFORIT 100 \
+		-errts /tmp/${s}/${dset}_MTD_BC_errts.nii.gz \
 		-noFDR
 
 		. /tmp/${s}/${dset}_MTD_BC_stats.REML_cmd
 		
+		mv ${dset}_MTD_BC_stats_REML+tlrc* ${WD}/${s}/
+		mv ${dset}_MTD_BC_stats+tlrc* ${WD}/${s}/
+		mv ${dset}_MTD_BC_stats.xmat.1D ${WD}/${s}/
+		mv *_MTD_BC_errts* ${WD}/${s}/
+		mv ${dset}_MTDReg*all*1D ${WD}/${s}/1Ds
+		mv ${dset}_BCReg*all*1D ${WD}/${s}/1Ds
+
 		# run model
 		# for ROI in FFA PPA; do
 		# 	3dDeconvolve \
@@ -229,8 +237,8 @@ for s in 503; do
 	
 
 	#mv /tmp/${s}/MTD* ${WD}/${s}
-	#cd ${WD}/${s} 
-	#rm -rf /tmp/${s}/
+	cd ${WD}/${s} 
+	rm -rf /tmp/${s}/
 done
 
 

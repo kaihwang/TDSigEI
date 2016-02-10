@@ -14,7 +14,7 @@ for s in $(ls -d 5*); do #$(ls -d 5*)
 			mri_label2vol --label ${hemisphere}.${ROI}.label --temp \
 			/home/despoB/kaihwang/Subjects/${s}/mri/rawavg.mgz \
 			--subject ${s} --hemi ${hemisphere} \
-			--o ${WD}/${s}/MPRAGE/${hemisphere}_${ROI}.nii.gz --proj frac 0 1 .1 --fillthresh .3 \
+			--o ${WD}/${s}/MPRAGE/${hemisphere}_${ROI}.nii.gz --proj frac 0 1 .1 --fillthresh 1 \
 			--reg ../mri/register.dat
 			
 			cd ${WD}/${s}/MPRAGE/
@@ -29,13 +29,14 @@ for s in $(ls -d 5*); do #$(ls -d 5*)
 		done
 	done
 
-	#rm ${WD}/${s}/PrimVis_indiv_ROI.nii.gz
-	
+	rm ${WD}/${s}/V1_indiv_ROI.nii.gz
+	rm ${WD}/${s}/V2_indiv_ROI.nii.gz
+
 	#3dcalc -a aparc.a2009s_aseg_mni.nii.gz -expr 'amongst(a,11145,21145)' -prefix ${WD}/${s}/PrimVis_indiv_ROI.nii.gz
 	for ROI in V1 V2; do
 
-		3dcalc -a {WD}/${s}/PrimVis_rh_${ROI}.nii.gz \
-		-b {WD}/${s}/PrimVis_lh_${ROI}.nii.gz \
+		3dcalc -a ${WD}/${s}/PrimVis_rh_${ROI}.nii.gz \
+		-b ${WD}/${s}/PrimVis_lh_${ROI}.nii.gz \
 		-expr 'a+b' -prefix ${WD}/${s}/${ROI}_indiv_ROI.nii.gz
 	done	
 done

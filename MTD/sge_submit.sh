@@ -11,6 +11,6 @@ cd ${WD}
 for Subject in $(/bin/ls -d 5*); do
 
 	sed "s/s in 503/s in ${Subject}/g" < ${SCRIPTS}/MTD/run_MTD_reg_model.sh> ~/tmp/MTDmodel_${Subject}.sh
-	qsub -V -M kaihwang -m e -e ~/tmp -o ~/tmp ~/tmp/MTDmodel_${Subject}.sh
+	qsub -l mem_free=15G -V -M kaihwang -m e -e ~/tmp -o ~/tmp ~/tmp/MTDmodel_${Subject}.sh
 		
 done

@@ -6,7 +6,7 @@ cd $WD
 
 
 #for FFA  PPA
-for s in $(ls -d 5*); do
+for s in $(ls -d 5*); do #$(ls -d 5*)
 	cd ${WD}/${s}/
 
 	# rm lib_GM_mask.nii.gz
@@ -43,7 +43,7 @@ for s in $(ls -d 5*); do
 	#fslmaths FFAmasked.nii.gz -thrP 75 FFA_indiv_ROI.nii.gz
 
 	#write out top 50 voxels as ROI
-	3dmaskdump -mask FFAmasked.nii.gz -quiet FFAmasked.nii.gz | sort -k4 -n -r | head -n 100 | 3dUndump -master FFAmasked.nii.gz -ijk -prefix FFA_indiv_ROI.nii.gz stdin
+	3dmaskdump -mask FFAmasked.nii.gz -quiet FFAmasked.nii.gz | sort -k4 -n -r | head -n 1 | 3dUndump -master FFAmasked.nii.gz -srad 8 -ijk -prefix FFA_indiv_ROI.nii.gz stdin
 
 	#3dmaxima -input FFAmasked+tlrc -min_dist 4 -spheres_1toN -out_rad 2 -prefix FFA_ROIs -thresh 1
 	#3dcalc -a FFA_ROIs+tlrc -b FFAmasked+tlrc -expr 'amongst(a,1)' -prefix FFA_indiv_ROI
@@ -58,7 +58,7 @@ for s in $(ls -d 5*); do
 	-b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_PPA_mask.nii.gz \
 	-expr 'isnegative(a*b)' -short -prefix PPAmasked.nii.gz
 	#fslmaths PPAmasked.nii.gz -thrP 75 PPA_indiv_ROI.nii.gz
-	3dmaskdump -mask PPAmasked.nii.gz -quiet PPAmasked.nii.gz | sort -k4 -n -r | head -n 100 | 3dUndump -master PPAmasked.nii.gz -ijk -prefix PPA_indiv_ROI.nii.gz stdin
+	3dmaskdump -mask PPAmasked.nii.gz -quiet PPAmasked.nii.gz | sort -k4 -n -r | head -n 1 | 3dUndump -master PPAmasked.nii.gz -srad 8 -ijk -prefix PPA_indiv_ROI.nii.gz stdin
 	
 	#3dmaxima -input PPAmasked+tlrc -min_dist 4 -spheres_1toN -out_rad 2 -prefix PPA_ROIs -neg_ext -thresh -1
 	#3dcalc -a PPA_ROIs+tlrc -b PPAmasked+tlrc -expr 'amongst(a,1)' -prefix PPA_indiv_ROI
@@ -69,7 +69,7 @@ done
 cd $WD
 
 # for motor
-for s in $(ls -d 5*); do
+for s in $(ls -d 5*); do #$(ls -d 5*)
 	cd ${WD}/${s}/
 
 	#find brik number with the face v house contrast
@@ -90,7 +90,7 @@ for s in $(ls -d 5*); do
 	-b /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_LH_mask.nii.gz \
 	-expr 'a*b' -short -prefix RHmasked.nii.gz
 	#fslmaths RHmasked.nii.gz -thrP 75 RH_indiv_ROI.nii.gz
-	3dmaskdump -mask RHmasked.nii.gz -quiet RHmasked.nii.gz | sort -k4 -n -r | head -n 100 | 3dUndump -master RHmasked.nii.gz -ijk -prefix RH_indiv_ROI.nii.gz stdin
+	3dmaskdump -mask RHmasked.nii.gz -quiet RHmasked.nii.gz | sort -k4 -n -r | head -n 1 | 3dUndump -master RHmasked.nii.gz -srad 8 -ijk -prefix RH_indiv_ROI.nii.gz stdin
 	
 	#3dmaxima -input RH_masked+tlrc -min_dist 4 -spheres_1toN -out_rad 2 -prefix RH_ROIs -thresh 0.01
 	#3dcalc -a RH_ROIs+tlrc -expr 'equals(a,1)' -prefix RH_indiv_ROI
@@ -105,7 +105,7 @@ for s in $(ls -d 5*); do
 	-b /home/despoB/kaihwang/TRSE/TDSigEI/Group/Group_RH_mask.nii.gz \
 	-expr 'a*b*(-1)' -short -prefix LHmasked.nii.gz
 	#fslmaths LHmasked.nii.gz -thrP 75 LH_indiv_ROI.nii.gz
-	3dmaskdump -mask LHmasked.nii.gz -quiet LHmasked.nii.gz | sort -k4 -n -r | head -n 100 | 3dUndump -master LHmasked.nii.gz -ijk -prefix LH_indiv_ROI.nii.gz stdin
+	3dmaskdump -mask LHmasked.nii.gz -quiet LHmasked.nii.gz | sort -k4 -n -r | head -n 1 | 3dUndump -master LHmasked.nii.gz -srad 8 -ijk -prefix LH_indiv_ROI.nii.gz stdin
 	
 	#3dmaxima -input LH_masked+tlrc -min_dist 4 -neg_ext -spheres_1toN -out_rad 2 -prefix LH_ROIs -thresh -0.01
 	#3dcalc -a LH_ROIs+tlrc -expr 'equals(a,1)' -prefix LH_indiv_ROI
