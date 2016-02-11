@@ -25,21 +25,37 @@ for s in 503; do
 			# every TS should be 99 elements long! first 3 volumes excluded!
 			for run in 1 2 3 4; do
 
+				#save temp nii output
+				3dTcat -prefix /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz ${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}]
+				
 				3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
-				${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D
+				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D
 
 				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
-				${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D
+				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D
 
 				3dmaskave -mask ${WD}/${s}/V2_indiv_ROI.nii.gz -q \
-				${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}] > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
+				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
 
 				echo "/tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_run${run}_VC-FFA.1D" | python ${MTD}/run_MTD.py
 				echo "/tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_run${run}_VC-PPA.1D" | python ${MTD}/run_MTD.py
+				
+				#temporal smooth the data for later MTD
+				3dcalc -a /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -b 'a[0,0,0,-1]' \
+				-c 'a[0,0,0,-2]' -d 'a[0,0,0,-3]' -e 'a[0,0,0,-4]' \
+				-f 'a[0,0,0,-5]' -g 'a[0,0,0,-6]' -h 'a[0,0,0,-7]' \
+				-i 'a[0,0,0,-8]' -j 'a[0,0,0,-9]' -k 'a[0,0,0,-10]' \
+				-expr 'mean(a,b,c,d,e,f,g,h,i,j,k)' -dsZERO -prefix /tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz
 
-				#save temp nii output
-				3dTcat -prefix /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz ${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}]
-			
+				#reaverage ROI TS to match temporal properties
+				3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
+				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D
+
+				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
+				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D
+
+				3dmaskave -mask ${WD}/${s}/V2_indiv_ROI.nii.gz -q \
+				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
 			done
 
 			#concat TS
@@ -77,22 +93,22 @@ for s in 503; do
 
 		# run big model!
 		3dDeconvolve \
-		-input /tmp/${s}/${dset}_Reg_FH_errts_run1.nii.gz \
-		/tmp/${s}/${dset}_Reg_FH_errts_run2.nii.gz \
-		/tmp/${s}/${dset}_Reg_FH_errts_run3.nii.gz \
-		/tmp/${s}/${dset}_Reg_FH_errts_run4.nii.gz \
-		/tmp/${s}/${dset}_Reg_HF_errts_run1.nii.gz \
-		/tmp/${s}/${dset}_Reg_HF_errts_run2.nii.gz \
-		/tmp/${s}/${dset}_Reg_HF_errts_run3.nii.gz \
-		/tmp/${s}/${dset}_Reg_HF_errts_run4.nii.gz \
-		/tmp/${s}/${dset}_Reg_Hp_errts_run1.nii.gz \
-		/tmp/${s}/${dset}_Reg_Hp_errts_run2.nii.gz \
-		/tmp/${s}/${dset}_Reg_Hp_errts_run3.nii.gz \
-		/tmp/${s}/${dset}_Reg_Hp_errts_run4.nii.gz \
-		/tmp/${s}/${dset}_Reg_Fp_errts_run1.nii.gz \
-		/tmp/${s}/${dset}_Reg_Fp_errts_run2.nii.gz \
-		/tmp/${s}/${dset}_Reg_Fp_errts_run3.nii.gz \
-		/tmp/${s}/${dset}_Reg_Fp_errts_run4.nii.gz \
+		-input /tmp/${s}/${dset}_tsmooth_FH_errts_run1.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_FH_errts_run2.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_FH_errts_run3.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_FH_errts_run4.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_HF_errts_run1.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_HF_errts_run2.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_HF_errts_run3.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_HF_errts_run4.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Hp_errts_run1.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Hp_errts_run2.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Hp_errts_run3.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Hp_errts_run4.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Fp_errts_run1.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Fp_errts_run2.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Fp_errts_run3.nii.gz \
+		/tmp/${s}/${dset}_tsmooth_Fp_errts_run4.nii.gz \
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
 		-num_stimts 16 \

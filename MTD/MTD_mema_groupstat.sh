@@ -32,11 +32,10 @@ for contrast in MTD_Target MTD_Distractor MTD_Target_Baseline MTD_Distractor_Bas
 			echo "${s} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_MTD_BC_stats_REML+tlrc[${cbrik}] /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_MTD_BC_stats_REML+tlrc[${tbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
 		done
 
-		echo "-cio \\
-		-mask /home/despoB/TRSEPPI/TDSigEI/ROIs/100overlap_mask+tlrc " >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
+		echo "-Rio -mask /home/despoB/TRSEPPI/TDSigEI/ROIs/100overlap_mask+tlrc " >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
 
-		qsub -l mem_free=3G -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
-		#. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_MTD_${dset}.sh
+		#qsub -l mem_free=3G -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
+		. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
 
 	done
 done
