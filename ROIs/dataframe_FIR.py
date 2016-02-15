@@ -4,8 +4,8 @@ import pandas as pd
 import glob
 import os
 import numpy as np
-import scipy.stats
-from ggplot import *
+#import scipy.stats
+#from ggplot import *
 
 #os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI')
 #Subjects = glob.glob('5*')

@@ -9,42 +9,38 @@ import numpy as np
 
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI')
 Subjects = glob.glob('5*')
-#Subjects = [503, 505, 508, 509, 510, 531, 512, 513, 516, 517, 518, 519, 523, 527, 528, 529, 530, 532, 534]
 
-ROIs = ['FFA', 'PPA', 'RH', 'LH', 'PrimVis']
-Conditions = ['FH', 'Fo', 'Fp', 'HF', 'Ho', 'Hp']
-MotorMapping = ['motor1', 'motor2']
-Runs = ['run1', 'run2']
-dsets = ['FIRReg', 'NuisanceReg']
-#['TD', 'To', 'P']
+ROIpairs = ['FFA-VC', 'PPA-VC']
+ROIs = ['FFA', 'PPA']
+Conditions = ['FH', 'HF', 'Fp', 'Hp']
+dsets = ['FIR'] #'nusiance'
 
 
 for dset in dsets:
 	TS_df = pd.DataFrame()
 	for s in Subjects:
-
 			for i, cond in enumerate(Conditions):
 				
-				for m, mapping in enumerate(MotorMapping):
-					for r, run in enumerate(Runs):
-						
-						tmpdf = pd.DataFrame()
-						tmpdf['Time'] = np.arange(1,100)
-						tmpdf['Subject'] = s
-						tmpdf['Condition'] = cond
-						tmpdf['MotorMapping'] = m+1
-						tmpdf['Run'] = r+1
-						
-						for roi in ROIs:
-							fn = '/home/despoB/kaihwang/TRSE/TDSigEI/SC_1Ds/%s_%s_%s_%s_%s_%s.1D' %(s, dset, roi, cond, mapping, run)
-							tmpdf[roi] = np.loadtxt(fn)
-							
+				#for roi in ROIpairs:	
+				tmpdf = pd.DataFrame()
+				#fn = '/home/despoB/kaihwang/TRSE/TDSigEI/%s/1Ds/%s_MTDReg_%s_%s_all.1D' %(s, dset, roi, cond)
+				#ts = np.loadtxt(fn)
+				tmpdf['Time'] = np.arange(1,361)
+				tmpdf['Subject'] = s
+				tmpdf['Condition'] = cond
+				tmpdf['Dataset'] = dset	
+				#tmpdf[roi] = ts[ts!=0]
 
-						TS_df = TS_df.append(tmpdf,  ignore_index=True)
+				for roi in ROIpairs:
+					fn = '/home/despoB/kaihwang/TRSE/TDSigEI/%s/1Ds/%s_MTDReg_%s_%s_all.1D' %(s, dset, roi, cond)
+					ts = np.loadtxt(fn)
+					tmpdf[roi] = ts[ts!=0]		
 
-	os.chdir('/home/despoB/kaihwang/bin/TDSigEI/')
-	fn = '/home/despoB/kaihwang/bin/TDSigEI/Data/TS_%s_df.csv' %dset
-	TS_df.to_csv(fn)
+				TS_df = TS_df.append(tmpdf,  ignore_index=True)
+
+	#os.chdir('/home/despoB/kaihwang/bin/TDSigEI/')
+	#fn = '/home/despoB/kaihwang/bin/TDSigEI/Data/TS_%s_df.csv' %dset
+	#TS_df.to_csv(fn)
 
 #groupedDF = FIR_df.groupby(['ROI','Condition','Volume'])
 #SEMdf = groupedDF.aggregate(scipy.stats.sem)

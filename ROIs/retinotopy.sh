@@ -11,7 +11,7 @@ cd /home/despoB/kaihwang/TRSE/Retinotopy_Pilot/pilotsub
 -ignore 0 \
 -clw run1/ndktm_functional_al+orig \
 -ccw run2/ndktm_functional_al+orig \
--anat_vol SUMA/retinopilot_SurfVol+orig.HEAD \
+-anat_vol@epi SUMA/retinopilot_SurfVol+orig.HEAD \
 -surf_vol SUMA/retinopilot_SurfVol+orig.HEAD \
 -spec_left SUMA/retinopilot_lh.spec \
 -spec_right SUMA/retinopilot_rh.spec \
@@ -29,7 +29,7 @@ cd /home/despoB/kaihwang/TRSE/Retinotopy_Pilot/pilotsub
 -ignore 0 \
 -clw run3/ndktm_functional_al+orig \
 -ccw run4/ndktm_functional_al+orig \
--anat_vol SUMA/retinopilot_SurfVol+orig.HEAD \
+-anat_vol@epi SUMA/retinopilot_SurfVol+orig.HEAD \
 -surf_vol SUMA/retinopilot_SurfVol+orig.HEAD \
 -spec_left SUMA/retinopilot_lh.spec \
 -spec_right SUMA/retinopilot_rh.spec \
@@ -47,7 +47,7 @@ cd /home/despoB/kaihwang/TRSE/Retinotopy_Pilot/pilotsub
 -ignore 0 \
 -clw run5/ndktm_functional_al+orig \
 -ccw run6/ndktm_functional_al+orig \
--anat_vol SUMA/retinopilot_SurfVol+orig.HEAD \
+-anat_vol@epi SUMA/retinopilot_SurfVol+orig.HEAD \
 -surf_vol SUMA/retinopilot_SurfVol+orig.HEAD \
 -spec_left SUMA/retinopilot_lh.spec \
 -spec_right SUMA/retinopilot_rh.spec \

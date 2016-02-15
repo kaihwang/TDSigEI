@@ -5,6 +5,7 @@ library(ggplot2)
 library(plyr)
 library(reshape2)
 library(scales)
+library("psyphy")
 
 # data are saved in google share folder
 setwd("~/Google Drive/Projects/TDSigEI/Data")
@@ -23,7 +24,7 @@ Data <-data.frame(Subj = character(),
                   IbsetTune =numeric ())
 
 # load data
-Subjects <- c(503, 505, 508, 509, 510, 511, 512, 513, 516, 517, 518, 523, 527)
+Subjects <- c(503, 505, 508, 509, 510, 512, 513, 516, 517, 518, 519, 523, 527, 528,529,530,531,532,534,536,537,539,540,542,546,547,549,550)
 for (s in Subjects) {
   file.names <- dir(path, pattern = paste("^.*", s, ".*\\.txt", sep=""))
   
@@ -41,6 +42,12 @@ Data$RT<-as.numeric(Data$RT)
 Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion, Data$Match), mean)
 Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion, Data$Match), mean, na.rm = TRUE)
 
+Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion), mean)
+Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion), mean, na.rm = TRUE)
+
+Stats.Accu <- tapply(Data$Accu, list(Data$Condtion, Data$Match), mean)
+Stats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean, na.rm = TRUE)
+#inStats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean, na.rm = TRUE)
 
 
 
