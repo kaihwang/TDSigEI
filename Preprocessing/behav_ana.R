@@ -6,6 +6,7 @@ library(plyr)
 library(reshape2)
 library(scales)
 library("psyphy")
+library("grid")
 
 # data are saved in google share folder
 setwd("~/Google Drive/Projects/TDSigEI/Data")
@@ -38,16 +39,72 @@ for (s in Subjects) {
 }
 Data[Data$RT==-1,"RT"]<-''
 Data$RT<-as.numeric(Data$RT)
-# tabulate
+
+
+### tabulate data
 Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion, Data$Match), mean)
 Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion, Data$Match), mean, na.rm = TRUE)
 
-Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion), mean)
-Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion), mean, na.rm = TRUE)
+S#Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion), mean)
+#Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion), mean, na.rm = TRUE)
 
-Stats.Accu <- tapply(Data$Accu, list(Data$Condtion, Data$Match), mean)
-Stats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean, na.rm = TRUE)
+#Stats.Accu <- tapply(Data$Accu, list(Data$Condtion, Data$Match), mean)
+#Stats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean, na.rm = TRUE)
 #inStats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean, na.rm = TRUE)
 
 
 
+### calculate d-prime for FH
+n <- 1
+for (s in Subjects) {
+  
+  if (1-Stats.Accu[n,4,1]== 0){
+    b = 0.01}
+  if (1-Stats.Accu[n,4,1]!= 0){
+    b = 1-Stats.Accu[n,4,1]}
+  if (Stats.Accu[n,4,2]!= 1){
+    a = Stats.Accu[n,4,2]}
+  if (Stats.Accu[n,4,2]== 1){
+    a = 0.99}
+  
+  d[n]<-dprime.SD(a-0.1, b) 
+  
+  n<-n+1
+  
+}
+dprime_HF<-data.frame(d)
+
+### calculate d-prime for HF
+n <- 1
+for (s in Subjects) {
+  
+  if (1-Stats.Accu[n,1,1]== 0){
+    b = 0.01}
+  if (1-Stats.Accu[n,1,1]!= 0){
+    b = 1-Stats.Accu[n,1,1]}
+  if (Stats.Accu[n,1,2]!= 1){
+    a = Stats.Accu[n,1,2]}
+  if (Stats.Accu[n,1,2]== 1){
+    a = 0.99}
+  
+  d[n]<-dprime.SD(a, b) 
+  
+  n<-n+1
+  
+}
+dprime_FH<-data.frame(d)
+
+
+
+#### plotting
+setwd("~/Google Drive/Projects/TDSigEI/")
+Data = read.csv('data.csv', header=TRUE)
+
+plt<-ggplot(Data, aes(x=T.PPA.VC, y=FIR_PPA_BF-FIR_PPA_Bp)) + geom_point(shape=19, size=3) + stat_smooth(method=lm, fullrange=TRUE) + theme_grey(base_size=24) 
+plt <- plt + labs(x="", y="") 
+plot(plt)
+m <- lm(T.FFA.VC ~ FIR_FFA_FB-FIR_FFA_Fp, Data)
+summary(m)
+#ggsave(filename = "VC-FFA_Dprime.pdf", plot = plt, units = c("in"),width=6, height=6) 
+
+#+ labs(x="MTD VC-FFA", y="D Prime for Face Targets") 
