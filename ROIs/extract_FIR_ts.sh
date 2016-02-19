@@ -8,7 +8,7 @@ cd $WD
 for s in $(/bin/ls -d 5*); do
 	cd ${WD}/${s}
 
-	for ROI in PPA FFA; do
+	for ROI in PPA FFA V1; do
 		for condition in FH Fo Fp HF Ho Hp; do
 			3dmaskave -mask ${ROI}_indiv_ROI.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_${ROI}_${condition}.1D
 			#3dmaskSVD -mask ${ROI}masked.nii.gz \

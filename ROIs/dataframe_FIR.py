@@ -13,7 +13,7 @@ Subjects = glob.glob('5*')
 
 
 os.chdir('/home/despoB/kaihwang/TRSE/TDSigEI/FIR_1Ds')
-ROIs = ['FFA', 'PPA']
+ROIs = ['FFA', 'PPA', 'V1']
 Conditions = ['FH', 'Fo', 'Fp', 'HF', 'Ho', 'Hp']
 #['TD', 'To', 'P']
 F_conditions = ['FH', 'Fo', 'Fp']

@@ -32,13 +32,18 @@ for s in $(ls -d 5*); do #$(ls -d 5*)
 	rm ${WD}/${s}/V1_indiv_ROI.nii.gz
 	rm ${WD}/${s}/V2_indiv_ROI.nii.gz
 
-	#3dcalc -a aparc.a2009s_aseg_mni.nii.gz -expr 'amongst(a,11145,21145)' -prefix ${WD}/${s}/PrimVis_indiv_ROI.nii.gz
-	for ROI in V1 V2; do
+	cd ${WD}/${s}/
+	3dmaskdump -mask PrimVis_rh_V1.nii.gz -quiet Localizer_PPAFFA_stats_REML+tlrc[1] | sort -k4 -n -r | head -n 1 | 3dUndump -master FFAmasked.nii.gz -srad 8 -ijk -prefix V1_indiv_ROI.nii.gz stdin
 
-		3dcalc -a ${WD}/${s}/PrimVis_rh_${ROI}.nii.gz \
-		-b ${WD}/${s}/PrimVis_lh_${ROI}.nii.gz \
-		-expr 'a+b' -prefix ${WD}/${s}/${ROI}_indiv_ROI.nii.gz
-	done	
+	#3dcalc -a aparc.a2009s_aseg_mni.nii.gz -expr 'amongst(a,11145,21145)' -prefix ${WD}/${s}/PrimVis_indiv_ROI.nii.gz
+	# for ROI in V1; do #V2
+
+	# 	3dcalc -a ${WD}/${s}/PrimVis_rh_${ROI}.nii.gz \
+	# 	-b ${WD}/${s}/PrimVis_lh_${ROI}.nii.gz \
+	# 	-expr 'a+b' -prefix ${WD}/${s}/${ROI}_indiv_ROI.nii.gz
+
+
+	# done	
 done
 
 #tkregister2 --mov rawavg.mgz --noedit --s 550 --regheader --reg /home/despoB/kaihwang/Subjects/550/mri/register.dat

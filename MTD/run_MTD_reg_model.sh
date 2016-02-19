@@ -34,8 +34,12 @@ for s in 503; do
 				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
 				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D
 
-				3dmaskave -mask ${WD}/${s}/V2_indiv_ROI.nii.gz -q \
+				3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
 				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
+
+				cp /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D ${WD}/${s}/1Ds
+				cp /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D ${WD}/${s}/1Ds
+				cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
 
 				echo "/tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_run${run}_VC-FFA.1D" | python ${MTD}/run_MTD.py
 				echo "/tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_run${run}_VC-PPA.1D" | python ${MTD}/run_MTD.py
@@ -43,9 +47,8 @@ for s in 503; do
 				#temporal smooth the data for later MTD
 				3dcalc -a /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -b 'a[0,0,0,-1]' \
 				-c 'a[0,0,0,-2]' -d 'a[0,0,0,-3]' -e 'a[0,0,0,-4]' \
-				-f 'a[0,0,0,-5]' -g 'a[0,0,0,-6]' -h 'a[0,0,0,-7]' \
-				-i 'a[0,0,0,-8]' -j 'a[0,0,0,-9]' -k 'a[0,0,0,-10]' \
-				-expr 'mean(a,b,c,d,e,f,g,h,i,j,k)' -dsZERO -prefix /tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz
+				-f 'a[0,0,0,-5]' \
+				-expr 'mean(a,b,c,d,e,f)' -dsZERO -prefix /tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz
 
 				#reaverage ROI TS to match temporal properties
 				3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
@@ -54,7 +57,7 @@ for s in 503; do
 				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
 				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D
 
-				3dmaskave -mask ${WD}/${s}/V2_indiv_ROI.nii.gz -q \
+				3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
 				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
 			done
 
@@ -66,6 +69,7 @@ for s in 503; do
 			#BC regressors
 			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_FFA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_FFA_${condition}_runs.1D
 			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_PPA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_PPA_${condition}_runs.1D
+			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_VC_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_VC_${condition}_runs.1D
 
 			# need to create zero factors for combining TD and P conditions...
 			yes "0" | head -n 396 > /tmp/${s}/ZEROs
@@ -84,12 +88,16 @@ for s in 503; do
 
 		cat /tmp/${s}/${dset}_BCReg_FFA_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_FFA_FH_all.1D
 		cat /tmp/${s}/${dset}_BCReg_PPA_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_PPA_FH_all.1D
+		cat /tmp/${s}/${dset}_BCReg_VC_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_VC_FH_all.1D
 		cat /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_FFA_HF_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_FFA_HF_all.1D
 		cat /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_PPA_HF_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_PPA_HF_all.1D
+		cat /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_VC_HF_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_VC_HF_all.1D
 		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_FFA_Hp_runs.1D /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_FFA_Hp_all.1D
 		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_PPA_Hp_runs.1D /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_PPA_Hp_all.1D
+		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_VC_Hp_runs.1D /tmp/${s}/ZEROs > /tmp/${s}/${dset}_BCReg_VC_Hp_all.1D
 		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_FFA_Fp_runs.1D > /tmp/${s}/${dset}_BCReg_FFA_Fp_all.1D
 		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_PPA_Fp_runs.1D > /tmp/${s}/${dset}_BCReg_PPA_Fp_all.1D
+		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_VC_Fp_runs.1D > /tmp/${s}/${dset}_BCReg_VC_Fp_all.1D
 
 		# run big model!
 		3dDeconvolve \
@@ -111,7 +119,7 @@ for s in 503; do
 		/tmp/${s}/${dset}_tsmooth_Fp_errts_run4.nii.gz \
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
-		-num_stimts 16 \
+		-num_stimts 20 \
 		-stim_file 1 /tmp/${s}/${dset}_MTDReg_FFA-VC_FH_all.1D -stim_label 1 MTD_FH_FFA-VC \
 		-stim_file 2 /tmp/${s}/${dset}_MTDReg_PPA-VC_FH_all.1D -stim_label 2 MTD_FH_PPA-VC \
 		-stim_file 3 /tmp/${s}/${dset}_MTDReg_FFA-VC_HF_all.1D -stim_label 3 MTD_HF_FFA-VC \
@@ -128,7 +136,11 @@ for s in 503; do
 		-stim_file 14 /tmp/${s}/${dset}_BCReg_PPA_Hp_all.1D -stim_label 14 BC_Hp_PPA \
 		-stim_file 15 /tmp/${s}/${dset}_BCReg_FFA_Fp_all.1D -stim_label 15 BC_Fp_FFA \
 		-stim_file 16 /tmp/${s}/${dset}_BCReg_PPA_Fp_all.1D -stim_label 16 BC_Fp_PPA \
-		-num_glt 14 \
+		-stim_file 17 /tmp/${s}/${dset}_BCReg_VC_FH_all.1D -stim_label 17 BC_FH_VC \
+		-stim_file 18 /tmp/${s}/${dset}_BCReg_VC_HF_all.1D -stim_label 18 BC_HF_VC \
+		-stim_file 19 /tmp/${s}/${dset}_BCReg_VC_Hp_all.1D -stim_label 19 BC_Hp_VC \
+		-stim_file 20 /tmp/${s}/${dset}_BCReg_VC_Fp_all.1D -stim_label 20 BC_Fp_VC \
+		-num_glt 17 \
 		-gltsym 'SYM: +0.5*MTD_FH_FFA-VC +0.5*MTD_HF_PPA-VC' -glt_label 1 MTD_Target \
 		-gltsym 'SYM: +0.5*MTD_HF_FFA-VC +0.5*MTD_FH_PPA-VC' -glt_label 2 MTD_Distractor \
 		-gltsym 'SYM: +0.5*MTD_Fp_FFA-VC +0.5*MTD_Hp_PPA-VC' -glt_label 3 MTD_Target_Baseline \
@@ -143,6 +155,9 @@ for s in 503; do
 		-gltsym 'SYM: +1*BC_FH_FFA +1*BC_HF_PPA -1*BC_Fp_FFA -1*BC_Hp_PPA' -glt_label 12 BC_Target-Baseline \
 		-gltsym 'SYM: +1*BC_HF_FFA +1*BC_FH_PPA -1*BC_Fp_FFA -1*BC_Hp_PPA' -glt_label 13 BC_Distractor-Baseline \
 		-gltsym 'SYM: +1*BC_FH_FFA +1*BC_HF_PPA -1*BC_HF_FFA -1*BC_FH_PPA' -glt_label 14 BC_Target-Distractor \
+		-gltsym 'SYM: +1*BC_FH_VC +1*BC_HF_VC -1*BC_Fp_VC -1*BC_Hp_VC' -glt_label 15 BC_Attn-Baseline_VC \
+		-gltsym 'SYM: +1*BC_FH_VC -1*BC_Fp_VC' -glt_label 16 BC_FH-Baseline_VC \
+		-gltsym 'SYM: +1*BC_HF_VC -1*BC_Hp_VC' -glt_label 17 BC_HF-Baseline_VC \
 		-fout \
 		-rout \
 		-tout \
