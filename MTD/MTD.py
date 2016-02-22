@@ -43,7 +43,7 @@ def coupling(data,window):
 
     #temporal smoothing
     temp = np.reshape(mtd,[der,nodes*nodes])
-    sma = pd.rolling_mean(temp,window)
+    sma = pd.rolling_mean(temp,window, center = True)
     sma = np.reshape(sma,[der,nodes,nodes])
     
     return (mtd, sma)
@@ -52,8 +52,8 @@ def coupling(data,window):
 
 #input the variables 'd' (data) and 's' (smooth) 
 #I've made 'd' random for now, but this could just as easily be real data
-d = np.random.rand(200,5)
-s = 9
+#d = np.random.rand(200,5)
+#s = 9
 
 #run the script
-coupling(d,s)
+#coupling(d,s)
