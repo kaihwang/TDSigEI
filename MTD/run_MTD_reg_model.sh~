@@ -52,13 +52,13 @@ for s in 503; do
 
 				#reaverage ROI TS to match temporal properties
 				3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_FFA_run${run}.1D
+				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D
 
 				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_PPA_run${run}.1D
+				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D
 
 				3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_VC_run${run}.1D
+				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
 			done
 
 			#concat TS
@@ -67,9 +67,9 @@ for s in 503; do
 			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_run*_VC-PPA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_PPA-VC_${condition}_runs.1D	
 
 			#BC regressors
-			cat $(ls /tmp/${s}/${dset}_sReg_${condition}_FFA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_FFA_${condition}_runs.1D
-			cat $(ls /tmp/${s}/${dset}_sReg_${condition}_PPA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_PPA_${condition}_runs.1D
-			cat $(ls /tmp/${s}/${dset}_sReg_${condition}_VC_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_VC_${condition}_runs.1D
+			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_FFA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_FFA_${condition}_runs.1D
+			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_PPA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_PPA_${condition}_runs.1D
+			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_VC_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_VC_${condition}_runs.1D
 
 			# need to create zero factors for combining TD and P conditions...
 			yes "0" | head -n 396 > /tmp/${s}/ZEROs
@@ -101,7 +101,7 @@ for s in 503; do
 
 		# run big model!
 		3dDeconvolve \
-		-input /tmp/${s}/${dset}_Reg_FH_errts_run1.nii.gz \
+		-input /tmp/${s}/${dset}_tsmooth_FH_errts_run1.nii.gz \
 		/tmp/${s}/${dset}_Reg_FH_errts_run2.nii.gz \
 		/tmp/${s}/${dset}_Reg_FH_errts_run3.nii.gz \
 		/tmp/${s}/${dset}_Reg_FH_errts_run4.nii.gz \

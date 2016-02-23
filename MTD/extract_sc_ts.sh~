@@ -36,10 +36,7 @@ for s in 503; do
 
 				3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
 				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
-
-				cp /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D ${WD}/${s}/1Ds
-				cp /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D ${WD}/${s}/1Ds
-				cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds				
+				
 
 				3dBandpass -prefix /tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz -input /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -band 0 0.1
 
