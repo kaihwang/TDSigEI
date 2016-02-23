@@ -64,21 +64,21 @@ for s in 503; do
 		done
 
 		# concat motion regressors and create censor files
-		cat $(ls ${WD}/${s}/${condition}_run*_motpar.1D | sort -V) > ${WD}/${s}/Motion_${condition}_runs.1D
+		cat $(/bin/ls ${WD}/${s}/${condition}_run*_motpar.1D | sort -V) > ${WD}/${s}/Motion_${condition}_runs.1D
 
 		1d_tool.py -infile ${WD}/${s}/Motion_${condition}_runs.1D \
 		-set_nruns 4 -show_censor_count -censor_motion 0.3 ${s}_${condition} -censor_prev_TR -overwrite
 
 		#tissue regressors
-		cat $(ls ${WD}/${s}/CSF_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegCSF_${condition}_TS.1D
-		cat $(ls ${WD}/${s}/WM_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegWM_${condition}_TS.1D
-		cat $(ls ${WD}/${s}/GS_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegGS_${condition}_TS.1D
+		cat $(/bin/ls ${WD}/${s}/CSF_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegCSF_${condition}_TS.1D
+		cat $(/bin/ls ${WD}/${s}/WM_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegWM_${condition}_TS.1D
+		cat $(/bin/ls ${WD}/${s}/GS_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegGS_${condition}_TS.1D
 
 		#run "nuisance model"
-		3dDeconvolve -input $(ls ${WD}/${s}/${condition}_run*.nii.gz | sort -V) \
+		3dDeconvolve -input $(/bin/ls ${WD}/${s}/${condition}_run*.nii.gz | sort -V) \
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
-		-num_stimts 8 \
+		-num_stimts 9 \
 		-stim_file 1 ${WD}/${s}/Motion_${condition}_runs.1D[0] -stim_label 1 motpar1 \
 		-stim_file 2 ${WD}/${s}/Motion_${condition}_runs.1D[1] -stim_label 2 motpar2 \
 		-stim_file 3 ${WD}/${s}/Motion_${condition}_runs.1D[2] -stim_label 3 motpar3 \
@@ -87,21 +87,13 @@ for s in 503; do
 		-stim_file 6 ${WD}/${s}/Motion_${condition}_runs.1D[5] -stim_label 6 motpar6 \
 		-stim_file 7 ${WD}/${s}/RegCSF_${condition}_TS.1D -stim_label 7 CSF \
 		-stim_file 8 ${WD}/${s}/RegWM_${condition}_TS.1D -stim_label 8 WM \
+		-stim_file 9 ${WD}/${s}/RegGS_${condition}_TS.1D -stim_label 9 GS \
 		-nobucket \
 		-GOFORIT 100 \
 		-noFDR \
 		-errts ${s}_nusiance_${condition}_errts.nii.gz \
 		-allzero_OK
 
-
-		#-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
-		# -iresp 1 ${condition}_FIR \
-		# -rout \
-		# -bucket FIR_${condition}_stats \
-		# -x1D FIR_${condition}_design_mat \
-		# -GOFORIT 100\
-		# -noFDR \
-		# -allzero_OK
 
 		# run FIR model
 		3dDeconvolve -input ${s}_nusiance_${condition}_errts.nii.gz \
