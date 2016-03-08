@@ -43,8 +43,8 @@ for s in $(/bin/ls -d 5*); do #$(ls -d 5*)
 	#fslmaths FFAmasked.nii.gz -thrP 75 FFA_indiv_ROI.nii.gz
 
 	#write out top 50 voxels as ROI
-	3dmaskdump -mask FFAmasked.nii.gz -quiet FFAmasked.nii.gz | sort -k4 -n -r | head -n 1 | 3dUndump -master FFAmasked.nii.gz -srad 8 -ijk -prefix FFA_sphere.nii.gz stdin
-	3dcalc -a FFA_sphere.nii.gz -b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_FFA_mask.nii.gz -expr 'a*b' -prefix FFA_indiv_ROI.nii.gz
+	3dmaskdump -mask FFAmasked.nii.gz -quiet FFAmasked.nii.gz | sort -k4 -n -r | head -n 255 | 3dUndump -master FFAmasked.nii.gz -ijk -prefix FFA_indiv_ROI.nii.gz stdin
+	#3dcalc -a FFA_sphere.nii.gz -b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_FFA_mask.nii.gz -expr 'a*b' -prefix FFA_indiv_ROI.nii.gz
 	#3dmaxima -input FFAmasked+tlrc -min_dist 4 -spheres_1toN -out_rad 2 -prefix FFA_ROIs -thresh 1
 	#3dcalc -a FFA_ROIs+tlrc -b FFAmasked+tlrc -expr 'amongst(a,1)' -prefix FFA_indiv_ROI
 
@@ -58,8 +58,8 @@ for s in $(/bin/ls -d 5*); do #$(ls -d 5*)
 	-b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_PPA_mask.nii.gz \
 	-expr 'isnegative(a*b)' -short -prefix PPAmasked.nii.gz
 	#fslmaths PPAmasked.nii.gz -thrP 75 PPA_indiv_ROI.nii.gz
-	3dmaskdump -mask PPAmasked.nii.gz -quiet PPAmasked.nii.gz | sort -k4 -n -r | head -n 1 | 3dUndump -master PPAmasked.nii.gz -srad 8 -ijk -prefix PPA_sphere.nii.gz stdin
-	3dcalc -a PPA_sphere.nii.gz -b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_PPA_mask.nii.gz -expr 'a*b' -prefix PPA_indiv_ROI.nii.gz
+	3dmaskdump -mask PPAmasked.nii.gz -quiet PPAmasked.nii.gz | sort -k4 -n -r | head -n 255 | 3dUndump -master PPAmasked.nii.gz -ijk -prefix PPA_indiv_ROI.nii.gz stdin
+	#3dcalc -a PPA_sphere.nii.gz -b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_PPA_mask.nii.gz -expr 'a*b' -prefix PPA_indiv_ROI.nii.gz
 
 	#3dmaxima -input PPAmasked+tlrc -min_dist 4 -spheres_1toN -out_rad 2 -prefix PPA_ROIs -neg_ext -thresh -1
 	#3dcalc -a PPA_ROIs+tlrc -b PPAmasked+tlrc -expr 'amongst(a,1)' -prefix PPA_indiv_ROI

@@ -56,7 +56,7 @@ a, b, fn = raw_input().split()
 
 TS1 = np.loadtxt(a)
 TS2 = np.loadtxt(b)
-MTD = coupling(np.array([TS1, TS2]).T, 7)[1][:,0,1]
+MTD = coupling(np.array([TS1, TS2]).T, 15)[1][:,0,1]
 MTD[np.isnan(MTD)] = 0; #turn nans to zero for saving
 MTD = np.insert(MTD,0,0) #insert 0 to the first element because its temporal diff
 #shifted_MTD = np.concatenate((np.array([0,0,0]),MTD[8:],np.array([0,0,0,0,0])))

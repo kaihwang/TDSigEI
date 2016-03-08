@@ -27,6 +27,7 @@ for s in 503; do
 
 				#save temp nii output
 				3dTcat -prefix /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz ${WD}/${s}/${s}_${dset}_${condition}_errts.nii.gz[${TRrange[$(($run-1))]}]
+				#3dBandpass -prefix /tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz -input /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -band 0 0.1
 				
 				3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
 				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D
@@ -37,28 +38,27 @@ for s in 503; do
 				3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
 				/tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D
 
-				cp /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D ${WD}/${s}/1Ds
-				cp /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D ${WD}/${s}/1Ds
-				cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
+				#cp /tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D ${WD}/${s}/1Ds
+				#cp /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D ${WD}/${s}/1Ds
+				#cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
 
 				echo "/tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_run${run}_VC-FFA.1D" | python ${MTD}/run_MTD.py
 				echo "/tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_run${run}_VC-PPA.1D" | python ${MTD}/run_MTD.py
 				
 				#temporal smooth the data for later MTD
-				3dcalc -a /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -b 'a[0,0,0,-1]' \
-				-c 'a[0,0,0,-2]' -d 'a[0,0,0,-3]' -e 'a[0,0,0,+1]' \
-				-f 'a[0,0,0,+2]' -g 'a[0,0,0,+3]' \
-				-expr 'mean(a,b,c,d,e,f,g)' -dsZERO -prefix /tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz
+				#3dcalc -a /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -b 'a[0,0,0,-1]' \
+				#-c 'a[0,0,0,-2]' -d 'a[0,0,0,+1]' -e 'a[0,0,0,+2]' \
+				#-expr 'mean(a,b,c,d,e)' -dsZERO -prefix /tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz
 
 				#reaverage ROI TS to match temporal properties
-				3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_FFA_run${run}.1D
+				#3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
+				#/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_FFA_run${run}.1D
 
-				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_PPA_run${run}.1D
+				#3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
+				#/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_PPA_run${run}.1D
 
-				3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_VC_run${run}.1D
+				#3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
+				#/tmp/${s}/${dset}_tsmooth_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_sReg_${condition}_VC_run${run}.1D
 			done
 
 			#concat TS
@@ -67,9 +67,9 @@ for s in 503; do
 			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_run*_VC-PPA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_PPA-VC_${condition}_runs.1D	
 
 			#BC regressors
-			cat $(ls /tmp/${s}/${dset}_sReg_${condition}_FFA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_FFA_${condition}_runs.1D
-			cat $(ls /tmp/${s}/${dset}_sReg_${condition}_PPA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_PPA_${condition}_runs.1D
-			cat $(ls /tmp/${s}/${dset}_sReg_${condition}_VC_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_VC_${condition}_runs.1D
+			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_FFA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_FFA_${condition}_runs.1D
+			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_PPA_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_PPA_${condition}_runs.1D
+			cat $(ls /tmp/${s}/${dset}_Reg_${condition}_VC_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_VC_${condition}_runs.1D
 
 			# need to create zero factors for combining TD and P conditions...
 			yes "0" | head -n 396 > /tmp/${s}/ZEROs

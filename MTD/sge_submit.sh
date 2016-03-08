@@ -12,5 +12,5 @@ for Subject in 503 508 510 513 517 519 527 529 531 534 537 540 546 549 505 509 5
 
 	sed "s/s in 503/s in ${Subject}/g" < ${SCRIPTS}/MTD/run_MTD_reg_model.sh > ~/tmp/m_${Subject}.sh
 	qsub -l mem_free=15G -V -M kaihwang -m e -e ~/tmp -o ~/tmp ~/tmp/m_${Subject}.sh
-		
+	#mem_free=15G	
 done
