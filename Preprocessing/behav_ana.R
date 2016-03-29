@@ -55,37 +55,39 @@ S#Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion), mean)
 
 
 ### calculate d-prime for FH
+d<-{}
 n <- 1
 for (s in Subjects) {
   
   if (1-Stats.Accu[n,4,1]== 0){
-    b = 0.01}
+    b = 0.00001}
   if (1-Stats.Accu[n,4,1]!= 0){
     b = 1-Stats.Accu[n,4,1]}
   if (Stats.Accu[n,4,2]!= 1){
     a = Stats.Accu[n,4,2]}
   if (Stats.Accu[n,4,2]== 1){
-    a = 0.99}
+    a = 0.99999}
   
-  d[n]<-dprime.SD(a-0.1, b) 
+  d[n]<-dprime.SD(a, b) 
   
   n<-n+1
   
 }
 dprime_HF<-data.frame(d)
+d<-{}
 
 ### calculate d-prime for HF
 n <- 1
 for (s in Subjects) {
   
   if (1-Stats.Accu[n,1,1]== 0){
-    b = 0.01}
+    b = 0.000001}
   if (1-Stats.Accu[n,1,1]!= 0){
     b = 1-Stats.Accu[n,1,1]}
   if (Stats.Accu[n,1,2]!= 1){
     a = Stats.Accu[n,1,2]}
   if (Stats.Accu[n,1,2]== 1){
-    a = 0.99}
+    a = 0.999999}
   
   d[n]<-dprime.SD(a, b) 
   
@@ -108,3 +110,13 @@ summary(m)
 #ggsave(filename = "VC-FFA_Dprime.pdf", plot = plt, units = c("in"),width=6, height=6) 
 
 #+ labs(x="MTD VC-FFA", y="D Prime for Face Targets") 
+
+#### b-b corr
+setwd("/Volumes/neuro/bin/TDSigEI/Data/")
+Data = read.csv('brain_behav_corr.csv', header=TRUE)
+
+#tmpData <-Data[Data$Condition=='HF',]
+plt <-ggplot(Data, aes(x=RepI, y=D_prime)) + geom_point(shape=19, size=3) + stat_smooth(method=lm, fullrange=TRUE) + theme_grey(base_size=24)
+plot(plt)
+m <- lm(FIR_Dist ~ MTD_Dist, Data)
+summary(m)
