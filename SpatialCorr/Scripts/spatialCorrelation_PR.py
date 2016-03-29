@@ -3,15 +3,11 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from scipy.stats.stats import pearsonr
 import pandas as pd
+import sys
 
 dataPath = '/home/despoB/kaihwang/TRSE/TDSigEI/'
 dataPath2 = '/home/despoB/akshayj/TDSigEI/SpatialCorr/'
 subjects = ['503', '505', '508', '509', '510', '512', '513', '516', '517', '518', '519', '523', '527', '528', '529', '530', '531', '532', '534']
-#subjects = ['503']
-# blocks_to_keep = range(1,20) + range(28,47) + range(55,74) + range(82,101) \
-# + range(1+102,20+102) + range(28+102,47+102) + range(55+102,74+102) + range(82+102,101+102) \
-# + range(1+204,20+204) + range(28+204,47+204) + range(55+204,74+204) + range(82+204,101+204) \
-# + range(1+306,20+306) + range(28+306,47+306) + range(55+306,74+306) + range(82+306,101+306) 
 
 repEnhanceArrFFA = np.zeros((len(subjects), 21))
 repSuppArrFFA = np.zeros((len(subjects), 21))
@@ -62,30 +58,30 @@ def computeCorrelation(beta_weights, masks):
 
     return ffaRepEnhancement, ffaRepSuppression, ppaRepEnhancement, ppaRepSuppression
     
-
+maskName = sys.argv[1]
 for i, subj in enumerate(subjects):
 
     print '*******************{1}. SUBJECT {0}*******************'.format(subj, i)
     SpatialCorrDF.set_value(i, 'Subject', subj)
     SpatialCorrDF_pReg.set_value(i, 'Subject', subj)
-    #os.chdir(dataPath2+subj)
+    os.chdir(dataPath2+subj)
     #convert to nifti
-    #files = os.listdir('.')
-    #if 'FIR_Hp_T_FEFremoved.nii.gz' not in files:
-    #    os.system("3dAFNItoNIFTI -prefix FIR_FH_T_FEFremoved.nii.gz FH_FIR_T_FEFremoved+tlrc")
-    #    os.system("3dAFNItoNIFTI -prefix FIR_HF_T_FEFremoved.nii.gz HF_FIR_T_FEFremoved+tlrc")
-    #    os.system("3dAFNItoNIFTI -prefix FIR_Fo_T_FEFremoved.nii.gz Fo_FIR_T_FEFremoved+tlrc")
-    #    os.system("3dAFNItoNIFTI -prefix FIR_Ho_T_FEFremoved.nii.gz Ho_FIR_T_FEFremoved+tlrc")
-    #    os.system("3dAFNItoNIFTI -prefix FIR_Fp_T_FEFremoved.nii.gz Fp_FIR_T_FEFremoved+tlrc")
-    #    os.system("3dAFNItoNIFTI -prefix FIR_Hp_T_FEFremoved.nii.gz Hp_FIR_T_FEFremoved+tlrc")
-    #else:
-    #    print('Skipping afni to nifti file conversion...')
-    FH_beta_pReg = nib.load(dataPath2 + subj + '/FIR_FH_T_FEFremoved.nii.gz').get_data()
-    HF_beta_pReg = nib.load(dataPath2 + subj + '/FIR_HF_T_FEFremoved.nii.gz').get_data()
-    Fo_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Fo_T_FEFremoved.nii.gz').get_data()
-    Ho_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Ho_T_FEFremoved.nii.gz').get_data()
-    Fp_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Fp_T_FEFremoved.nii.gz').get_data()
-    Hp_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Hp_T_FEFremoved.nii.gz').get_data()
+    files = os.listdir('./{0}removed/'.format(maskName))
+    if 'FIR_Hp_{0}removed.nii.gz'.format(maskName) not in files:
+        os.system("3dAFNItoNIFTI -prefix FIR_FH_{0}removed.nii.gz {0}removed/FH_FIR_{0}removed+tlrc".format(maskName))
+        os.system("3dAFNItoNIFTI -prefix FIR_HF_{0}removed.nii.gz {0}removed/HF_FIR_{0}removed+tlrc".format(maskName))
+        os.system("3dAFNItoNIFTI -prefix FIR_Fo_{0}removed.nii.gz {0}removed/Fo_FIR_{0}removed+tlrc".format(maskName))
+        os.system("3dAFNItoNIFTI -prefix FIR_Ho_{0}removed.nii.gz {0}removed/Ho_FIR_{0}removed+tlrc".format(maskName))
+        os.system("3dAFNItoNIFTI -prefix FIR_Fp_{0}removed.nii.gz {0}removed/Fp_FIR_{0}removed+tlrc".format(maskName))
+        os.system("3dAFNItoNIFTI -prefix FIR_Hp_{0}removed.nii.gz {0}removed/Hp_FIR_{0}removed+tlrc".format(maskName))
+    else:
+        print('Skipping afni to nifti file conversion...')
+    FH_beta_pReg = nib.load(dataPath2 + subj + '/FIR_FH_{0}removed.nii.gz'.format(maskName)).get_data()
+    HF_beta_pReg = nib.load(dataPath2 + subj + '/FIR_HF_{0}removed.nii.gz'.format(maskName)).get_data()
+    Fo_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Fo_{0}removed.nii.gz'.format(maskName)).get_data()
+    Ho_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Ho_{0}removed.nii.gz'.format(maskName)).get_data()
+    Fp_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Fp_{0}removed.nii.gz'.format(maskName)).get_data()
+    Hp_beta_pReg = nib.load(dataPath2 + subj + '/FIR_Hp_{0}removed.nii.gz'.format(maskName)).get_data()
 
     FH_beta = nib.load(dataPath + subj + '/FIR_FH.nii.gz').get_data()
     HF_beta = nib.load(dataPath + subj + '/FIR_HF.nii.gz').get_data()
@@ -140,8 +136,8 @@ for i, subj in enumerate(subjects):
     subjNum += 1
     #end for loop
 
-SpatialCorrDF.to_csv('/home/despoB/akshayj/TDSigEI/SpatialCorr/SpatialCorr_df.csv')
-SpatialCorrDF_pReg.to_csv('/home/despoB/akshayj/TDSigEI/SpatialCorr/SpatialCorr_df_pReg.csv')
+SpatialCorrDF.to_csv('/home/despoB/akshayj/TDSigEI/SpatialCorr/CorrOutput/SpatialCorr_df.csv')
+SpatialCorrDF_pReg.to_csv('/home/despoB/akshayj/TDSigEI/SpatialCorr/CorrOutput/SpatialCorr_{0}removed.csv'.format(maskName))
 # # Average across subjects for PPA
 # enhanceMeanPPA = repEnhanceArrPPA.mean(0)
 # enhanceErrorPPA = repEnhanceArrPPA.std(0) / np.sqrt(len(subjects))
