@@ -94,6 +94,24 @@ for s in 503; do
 		-errts ${s}_nusiance_${condition}_errts.nii.gz \
 		-allzero_OK
 
+		3dDeconvolve -input $(/bin/ls ${WD}/${s}/${condition}_run*.nii.gz | sort -V) \
+		-mask ${WD}/ROIs/100overlap_mask+tlrc \
+		-polort A \
+		-num_stimts 8 \
+		-stim_file 1 ${WD}/${s}/Motion_${condition}_runs.1D[0] -stim_label 1 motpar1 \
+		-stim_file 2 ${WD}/${s}/Motion_${condition}_runs.1D[1] -stim_label 2 motpar2 \
+		-stim_file 3 ${WD}/${s}/Motion_${condition}_runs.1D[2] -stim_label 3 motpar3 \
+		-stim_file 4 ${WD}/${s}/Motion_${condition}_runs.1D[3] -stim_label 4 motpar4 \
+		-stim_file 5 ${WD}/${s}/Motion_${condition}_runs.1D[4] -stim_label 5 motpar5 \
+		-stim_file 6 ${WD}/${s}/Motion_${condition}_runs.1D[5] -stim_label 6 motpar6 \
+		-stim_file 7 ${WD}/${s}/RegCSF_${condition}_TS.1D -stim_label 7 CSF \
+		-stim_file 8 ${WD}/${s}/RegWM_${condition}_TS.1D -stim_label 8 WM \
+		-nobucket \
+		-GOFORIT 100 \
+		-noFDR \
+		-errts ${s}_nusiance_${condition}_errts_nogs.nii.gz \
+		-allzero_OK
+
 
 		# run FIR model
 		3dDeconvolve -input ${s}_nusiance_${condition}_errts.nii.gz \
@@ -109,6 +127,21 @@ for s in 503; do
 		-GOFORIT 100\
 		-noFDR \
 		-errts ${s}_FIR_${condition}_errts.nii.gz \
+		-allzero_OK
+
+		3dDeconvolve -input ${s}_nusiance_${condition}_errts_nogs.nii.gz \
+		-concat '1D: 0 102 204 306' \
+		-mask ${WD}/ROIs/100overlap_mask+tlrc \
+		-polort A \
+		-num_stimts 1 \
+		-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
+		-iresp 1 ${condition}_FIR_nogs \
+		-rout \
+		-bucket FIR_${condition}_stats_nogs \
+		-x1D FIR_${condition}_design_mat_nogs \
+		-GOFORIT 100\
+		-noFDR \
+		-errts ${s}_FIR_${condition}_errts_nogs.nii.gz \
 		-allzero_OK
 
 	done
