@@ -18,16 +18,16 @@ for s in $(/bin/ls -d 5*); do
 
 	for ROI in BC_FEF BC_IPS; do
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[34] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_FFA
+		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[35] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_FFA
 		
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[38] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_PPA
+		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[39] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_PPA
 
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[42] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_FFA
+		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[43] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_FFA
 		
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[46] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_PPA
+		-quiet ${WD}/${s}/nusiance_MTD_BC_stats_REML+tlrc[47] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_PPA
 
 
 
@@ -39,16 +39,16 @@ for s in $(/bin/ls -d 5*); do
 
 	for ROI in MTD_MFG; do
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[2] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_FFA
+		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[3] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_FFA
 		
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[6] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_PPA
+		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[7] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_FH_PPA
 
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[10] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_FFA
+		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[11] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_FFA
 		
 		3dmaskave -mask /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/${ROI}.nii.gz \
-		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[14] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_PPA
+		-quiet ${WD}/${s}/FIR_MTD_BC_stats_REML+tlrc[15] >> /home/despoB/kaihwang/bin/TDSigEI/Data/${ROI}_HF_PPA
 
 
 
