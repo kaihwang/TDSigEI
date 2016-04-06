@@ -31,8 +31,8 @@ for w in 5 7 9 11 13 15 17 19; do
 			for ROI in FFA; do
 				c=1
 				for condition in FH Fp HF; do
-					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_nogs_REML+tlrc | grep "MTD_${condition}_${ROI}-VC#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
-					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_nogs_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
+					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc | grep "MTD_${condition}_${ROI}-VC#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
+					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
 					c=$(($c+1))
 				done
 			done
@@ -41,8 +41,8 @@ for w in 5 7 9 11 13 15 17 19; do
 			for ROI in PPA; do
 				c=1
 				for condition in HF Hp FH; do
-					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_nogs_REML+tlrc | grep "MTD_${condition}_${ROI}-VC#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
-					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_nogs_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
+					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc | grep "MTD_${condition}_${ROI}-VC#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
+					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
 					c=$(($c+1))
 				done
 			done
@@ -50,9 +50,9 @@ for w in 5 7 9 11 13 15 17 19; do
 			n=$(($n+1))
 		done
 
-		echo "-bucket ANOVA_MTD_w${w}_${dset}_nogs.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
+		echo "-bucket ANOVA_MTD_w${w}_${dset}.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
 
-		. /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
+		#. /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
 
 	done
 
@@ -82,8 +82,8 @@ for w in 5 7 9 11 13 15 17 19; do
 			for ROI in FFA; do
 				c=1
 				for condition in FH Fp HF; do
-					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_MTD_w${w}_BC_stats_nogs_REML+tlrc | grep "BC_${condition}_${ROI}#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
-					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_MTD_w${w}_BC_stats_nogs_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
+					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc | grep "BC_${condition}_${ROI}#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
+					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
 					c=$(($c+1))
 				done
 			done
@@ -92,8 +92,8 @@ for w in 5 7 9 11 13 15 17 19; do
 			for ROI in PPA; do
 				c=1
 				for condition in HF Hp FH; do
-					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_MTD_w${w}_BC_stats_nogs_REML+tlrc | grep "BC_${condition}_${ROI}#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
-					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_MTD_w${w}_BC_stats_nogs_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
+					cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc | grep "BC_${condition}_${ROI}#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
+					echo "-dset ${r} ${c} ${n} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${cbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
 					c=$(($c+1))
 				done
 			done
@@ -101,7 +101,7 @@ for w in 5 7 9 11 13 15 17 19; do
 			n=$(($n+1))
 		done
 
-		echo "-bucket ANOVA_BC_w${w}_${dset}_nogs.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
+		echo "-bucket ANOVA_BC_w${w}_${dset}.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
 
 		. /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
 
