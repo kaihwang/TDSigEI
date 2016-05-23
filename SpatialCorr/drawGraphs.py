@@ -15,8 +15,8 @@ fig, ax = plt.subplots()
 
 enhanceMeans = [np.mean(repEn_ffa), np.mean(repEn_ffa2), np.mean(repEn_ppa), np.mean(repEn_ppa2)]
 suppressMeans = [np.mean(repSup_ffa),np.mean(repSup_ffa2), np.mean(repSup_ppa), np.mean(repSup_ppa2)]
-enhanceStd = [np.std(repEn_ffa), np.std(repEn_ffa2), np.std(repEn_ppa), np.std(repEn_ppa2)]
-suppressStd = [np.std(repSup_ffa), np.std(repSup_ffa2),  np.std(repSup_ppa), np.std(repSup_ppa2)]
+enhanceStd = [np.std(repEn_ffa), np.std(repEn_ffa2), np.std(repEn_ppa), np.std(repEn_ppa2)]/np.sqrt(12)
+suppressStd = [np.std(repSup_ffa), np.std(repSup_ffa2),  np.std(repSup_ppa), np.std(repSup_ppa2)]/np.sqrt(12)
 
 rects1 = ax.bar(np.arange(4), enhanceMeans, 0.35, color='g', yerr=enhanceStd)
 rects2 = ax.bar(np.arange(4)+0.35, suppressMeans, 0.35, color = 'b', yerr=suppressStd)
@@ -24,12 +24,12 @@ rects2 = ax.bar(np.arange(4)+0.35, suppressMeans, 0.35, color = 'b', yerr=suppre
 ax.set_ylabel('Spatial Correlation Coefficient')
 ax.set_title('Spatial Correlation in FFA and PPA across TMS conditions')
 ax.set_xticks(np.arange(4) + 0.35)
-ax.set_xticklabels(('FFA_ifg','FFA_vert', 'PPA_ifg', 'PPA_vert'))
+ax.set_xticklabels(('FFA, IFG TMS','FFA, control TMS', 'PPA, IFG TMS', 'PPA, control TMS'))
 ax.set_xlabel('TMS conditions in different functional subregions')
 ax.legend((rects1[0],rects2[0]), ('Enhancement', 'Suppression'))
 
 ax.axhline(y=0, color='k')
-ax.axvline(x=0, color='k')
+#ax.axvline(x=0, color='k')
 
 
 
