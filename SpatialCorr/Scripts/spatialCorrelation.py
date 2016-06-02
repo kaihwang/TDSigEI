@@ -7,16 +7,7 @@ import pandas as pd
 dataPath = '/home/despoB/kaihwang/TRSE/TDSigEI/'
 dataPath2 = '/home/despoB/akshayj/TDSigEI/SpatialCorr/'
 subjects = ['503', '505', '508', '509', '510', '512', '513', '516', '517', '518', '519', '523', '527', '528', '529', '530', '531', '532', '534', '536', '537', '539', '540', '542', '546', '547', '549', '550']
-#subjects = ['503']
-# blocks_to_keep = range(1,20) + range(28,47) + range(55,74) + range(82,101) \
-# + range(1+102,20+102) + range(28+102,47+102) + range(55+102,74+102) + range(82+102,101+102) \
-# + range(1+204,20+204) + range(28+204,47+204) + range(55+204,74+204) + range(82+204,101+204) \
-# + range(1+306,20+306) + range(28+306,47+306) + range(55+306,74+306) + range(82+306,101+306) 
 
-repEnhanceArrFFA = np.zeros((len(subjects), 21))
-repSuppArrFFA = np.zeros((len(subjects), 21))
-repEnhanceArrPPA = np.zeros((len(subjects), 21))
-repSuppArrPPA = np.zeros((len(subjects), 21))
 
 SpatialCorrDF = pd.DataFrame()
 corrFunc2 = lambda a, c, d: np.array(pearsonr(a, d)) - np.array(pearsonr(c, d))
@@ -121,7 +112,7 @@ for i, subj in enumerate(subjects):
     subjNum += 1
     #end for loop
 
-SpatialCorrDF.to_csv('/home/despoB/akshayj/TDSigEI/SpatialCorr/SpatialCorr_df.csv')
+SpatialCorrDF.to_csv('/home/despoB/kaihwang/bin/TDSigEI/Data/SpatialCorr_df.csv')
 # Average across subjects for PPA
 # enhanceMeanPPA = repEnhanceArrPPA.mean(0)
 # enhanceErrorPPA = repEnhanceArrPPA.std(0) / np.sqrt(len(subjects))
