@@ -6,15 +6,47 @@ SCRIPT='/home/despoB/kaihwang/TRSE/TRSEPPI/TRSE_scripts'
 MTD='/home/despoB/kaihwang/bin/TDSigEI/MTD'
 
 
-
-
 for s in 1106; do
 	cd $WD/${s}
+
+	#get nuisance regressors
+	fslreorient2std ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz
+	applywarp --ref=${WD}/${s}/MPRAGE/template_brain.nii \
+	--rel \
+	--interp=nn \
+	--in=${WD}/${s}/MPRAGE/mprage_bet_fast_seg_0.nii.gz \
+	--warp=${WD}/${s}/MPRAGE/mprage_warpcoef.nii.gz \
+	-o ${WD}/${s}/CSF_orig.nii.gz
+	#rm ${WD}/${s}/CSF_erode.nii.gz
+	3dmask_tool -prefix ${WD}/${s}/CSF_erode.nii.gz -quiet -input ${WD}/${s}/CSF_orig.nii.gz -dilate_result -1
+
+	fslreorient2std ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz ${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz
+	applywarp --ref=${WD}/${s}/MPRAGE/template_brain.nii \
+	--rel \
+	--interp=nn \
+	--in=${WD}/${s}/MPRAGE/mprage_bet_fast_seg_2.nii.gz \
+	--warp=${WD}/${s}/MPRAGE/mprage_warpcoef.nii.gz \
+	-o ${WD}/${s}/WM_orig.nii.gz	
+	#rm ${WD}/${s}/WM_erode.nii.gz
+	3dmask_tool -prefix ${WD}/${s}/WM_erode.nii.gz -quiet -input ${WD}/${s}/WM_orig.nii.gz -dilate_result -1
+
+	for r in $(seq 1 1 20); do
+
+		3dmaskave -quiet -mask ${WD}/${s}/CSF_erode.nii.gz ${WD}/${s}/run${r}/nswdkmt_functional_6.nii.gz > ${WD}/${s}/CSF_TS_run${r}.1D
+		3dmaskave -quiet -mask ${WD}/${s}/WM_erode.nii.gz ${WD}/${s}/run${r}/nswdkmt_functional_6.nii.gz > ${WD}/${s}/WM_TS_run${r}.1D
+		3dmaskave -quiet -mask ${WD}/${s}/run${r}/nswdkmt_functional_6.nii.gz[0] ${WD}/${s}/run${r}/nswdkmt_functional_6.nii.gz > ${WD}/${s}/GS_TS_run${r}.1D
+	
+	done
+
+	cat $(/bin/ls ${WD}/${s}/CSF_TS_run*.1D | sort -V) > ${WD}/${s}/RegCSF_TS.1D
+	cat $(/bin/ls ${WD}/${s}/WM_TS_run*.1D | sort -V) > ${WD}/${s}/RegWM_TS.1D
+	cat $(/bin/ls ${WD}/${s}/GS_TS_run*.1D | sort -V) > ${WD}/${s}/RegGS_TS.1D
+	cat $(/bin/ls run*/*1D | sort -V) > ${WD}/${s}/motionRuns.1D
 
 	3dDeconvolve -input $(/bin/ls run*/nswdkmt_functional*.nii.gz | sort -V) \
 	-mask /home/despoB/TRSEPPI/TRSEPPI/overlap_mask/TRSE_80perOverlap_mask.nii.gz \
 	-polort A \
-	-num_stimts 14 \
+	-num_stimts 17 \
 	-stim_times 1 ${SCRIPT}/${s}_both_face.txt 'TENT(0, 14, 15)' -stim_label 1 both_face \
 	-stim_times 2 ${SCRIPT}/${s}_both_scene.txt 'TENT(0, 14, 15)' -stim_label 2 both_scene \
 	-stim_times 3 ${SCRIPT}/${s}_categorize_scene.txt 'TENT(0, 14, 15)' -stim_label 3 categorize_scene \
@@ -29,6 +61,9 @@ for s in 1106; do
 	-stim_file 12 ${WD}/${s}/motionRuns.1D[3] -stim_label 12 motpar4 -stim_base 12 \
 	-stim_file 13 ${WD}/${s}/motionRuns.1D[4] -stim_label 13 motpar5 -stim_base 13 \
 	-stim_file 14 ${WD}/${s}/motionRuns.1D[5] -stim_label 14 motpar6 -stim_base 14 \
+	-stim_file 15 ${WD}/${s}/RegCSF_TS.1D -stim_label 15 CSF -stim_base 15 \
+	-stim_file 16 ${WD}/${s}/RegWM_TS.1D -stim_label 16 WM -stim_base 16 \
+	-stim_file 17 ${WD}/${s}/RegGS_TS.1D -stim_label 17 GS -stim_base 17 \
 	-iresp 1 both_face_FIR \
 	-iresp 2 both_scene_FIR \
 	-iresp 3 categorize_scene_FIR \
