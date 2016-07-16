@@ -25,7 +25,14 @@ for Subject in $(ls -d 5*); do
 	#rm ${Subject}_LH*
 
 	#mkdir 1Ds
-	mv *.1D 1Ds
-	mv *.txt 1Ds
-	
+	#mv *.1D 1Ds
+	#mv *.txt 1Ds
+	rm -rf *nogs*
+
+	for w in 5 7 9 11 13 15 17 19; do
+
+		rm FIR_w${w}_MTD_BC_stats+tlrc*
+		rm nusiance_w${w}_MTD_BC_stats+tlrc*
+	done
+
 done

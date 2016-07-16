@@ -46,7 +46,7 @@ for s in 1106; do
 	3dDeconvolve -input $(/bin/ls run*/nswdkmt_functional*.nii.gz | sort -V) \
 	-mask /home/despoB/TRSEPPI/TRSEPPI/overlap_mask/TRSE_80perOverlap_mask.nii.gz \
 	-polort A \
-	-num_stimts 17 \
+	-num_stimts 16 \
 	-stim_times 1 ${SCRIPT}/${s}_both_face.txt 'TENT(0, 14, 15)' -stim_label 1 both_face \
 	-stim_times 2 ${SCRIPT}/${s}_both_scene.txt 'TENT(0, 14, 15)' -stim_label 2 both_scene \
 	-stim_times 3 ${SCRIPT}/${s}_categorize_scene.txt 'TENT(0, 14, 15)' -stim_label 3 categorize_scene \
@@ -63,7 +63,6 @@ for s in 1106; do
 	-stim_file 14 ${WD}/${s}/motionRuns.1D[5] -stim_label 14 motpar6 -stim_base 14 \
 	-stim_file 15 ${WD}/${s}/RegCSF_TS.1D -stim_label 15 CSF -stim_base 15 \
 	-stim_file 16 ${WD}/${s}/RegWM_TS.1D -stim_label 16 WM -stim_base 16 \
-	-stim_file 17 ${WD}/${s}/RegGS_TS.1D -stim_label 17 GS -stim_base 17 \
 	-iresp 1 both_face_FIR \
 	-iresp 2 both_scene_FIR \
 	-iresp 3 categorize_scene_FIR \
@@ -96,7 +95,7 @@ for s in 1106; do
 	done
 
 	#cal MTD across windows
-	for w in 8 10 12 14 16 18 20 22 24 26 28 30; do
+	for w in 6 8 10 12 14 16 18 20 22 24 26 28 30; do
 		for r in $(seq 1 1 20); do
 			echo "${WD}/${s}/BC_run${r}_FFA.1D ${WD}/${s}/BC_run${r}_VC.1D ${WD}/${s}/MTD_w${w}_run${r}_VC-FFA.1D ${w}" | python ${MTD}/run_MTD.py
 			echo "${WD}/${s}/BC_run${r}_PPA.1D ${WD}/${s}/BC_run${r}_VC.1D ${WD}/${s}/MTD_w${w}_run${r}_VC-PPA.1D ${w}" | python ${MTD}/run_MTD.py

@@ -56,7 +56,7 @@ for s in $(/bin/ls -d 5*); do #$(ls -d 5*)
 	3dcalc \
 	-a face_v_house_tstat+tlrc \
 	-b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_PPA_mask.nii.gz \
-	-expr 'isnegative(a*b)' -short -prefix PPAmasked.nii.gz
+	-expr 'isnegative(a*b)*b' -short -prefix PPAmasked.nii.gz
 	#fslmaths PPAmasked.nii.gz -thrP 75 PPA_indiv_ROI.nii.gz
 	3dmaskdump -mask PPAmasked.nii.gz -quiet PPAmasked.nii.gz | sort -k4 -n -r | head -n 255 | 3dUndump -master PPAmasked.nii.gz -ijk -prefix PPA_indiv_ROI.nii.gz stdin
 	#3dcalc -a PPA_sphere.nii.gz -b /home/despoB/kaihwang/TRSE/TDSigEI/ROIs/Group_PPA_mask.nii.gz -expr 'a*b' -prefix PPA_indiv_ROI.nii.gz

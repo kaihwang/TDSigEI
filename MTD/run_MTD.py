@@ -44,7 +44,7 @@ def coupling(data,window):
 
     #temporal smoothing
     temp = np.reshape(mtd,[der,nodes*nodes])
-    sma = pd.rolling_mean(temp,window, center=True)
+    sma = pd.rolling_mean(temp,window, center=False)
     sma = np.reshape(sma,[der,nodes,nodes])
     
     return (mtd, sma)

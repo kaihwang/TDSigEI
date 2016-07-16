@@ -116,11 +116,11 @@ setwd("/Volumes/neuro/bin/TDSigEI/Data/")
 Data = read.csv('brain_behav_corr.csv', header=TRUE)
 
 #tmpData <-Data[Data$Condition=='HF',]
-plt <-ggplot(Data, aes(x=MTD_Target-MTD_Dist, y=D_prime, colour = Condition)) + geom_point(shape=19, size=3) + stat_smooth(method=lm, fullrange=TRUE) + theme_classic(base_size=14)
-plt <- plt + xlab("MTD Strength for Distractors") + ylab("Evoked Amplitude for Distractors") 
+plt <-ggplot(Data, aes(x=FIR_HF_FFA, y=FIR_HF_PPA)) + geom_point(shape=19, size=3) + stat_smooth(method=lm, fullrange=TRUE) + theme_classic(base_size=14)
+#plt <- plt + xlab("MTD Strength for Distractors") + ylab("Evoked Amplitude for Distractors") 
 plot(plt)
-ggsave(filename = 'MTD_FIR.pdf', plot = plt, units = c("in"),width=6.5, height=3.15,dpi=300) 
+#ggsave(filename = 'MTD_FIR.pdf', plot = plt, units = c("in"),width=6.5, height=3.15,dpi=300) 
 
-tmpD <- Data[Data$Condition == 'HF',]
-m <- lm(FIR_Dist ~ MTD_Dist, tmpD)
+#tmpD <- Data[Data$Condition == 'HF',]
+m <- lm(FIR_FH_FFA ~ FIR_HF_PPA, Data)
 summary(m)
