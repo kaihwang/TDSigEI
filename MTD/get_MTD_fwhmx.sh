@@ -155,7 +155,7 @@ for s in 503; do
 			-GOFORIT 100 \
 			-errts /tmp/${s}/${dset}_w${w}_MTD_BC_errts
 
-			3dFWHMx -automask -acf -input FIR_w15_MTD_BC_errts+tlrc -out ${WD}/${s}/fwhmx.txt
+			3dFWHMx -automask -acf ${WD}/${s}/fwhmx.txt -input FIR_w15_MTD_BC_errts+tlrc
 
 			#mv *errts* ${WD}/${s}/
 		done
