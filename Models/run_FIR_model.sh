@@ -59,7 +59,7 @@ for s in 503; do
 			#nuisance tissue signal
 			3dmaskave -quiet -mask ${WD}/${s}/CSF_erode.nii.gz ${WD}/${s}/${condition}_run${run}.nii.gz > ${WD}/${s}/CSF_TS_${condition}_run${run}.1D
 			3dmaskave -quiet -mask ${WD}/${s}/WM_erode.nii.gz ${WD}/${s}/${condition}_run${run}.nii.gz > ${WD}/${s}/WM_TS_${condition}_run${run}.1D
-			3dmaskave -quiet -mask ${WD}/${s}/subject_mask.nii.gz ${WD}/${s}/${condition}_run${run}.nii.gz > ${WD}/${s}/GS_TS_${condition}_run${run}.1D
+			3dmaskave -quiet -mask ${WD}/${s}/${condition}_run${run}.nii.gz[0] ${WD}/${s}/${condition}_run${run}.nii.gz > ${WD}/${s}/GS_TS_${condition}_run${run}.1D
 
 		done
 
@@ -67,7 +67,7 @@ for s in 503; do
 		cat $(/bin/ls ${WD}/${s}/${condition}_run*_motpar.1D | sort -V) > ${WD}/${s}/Motion_${condition}_runs.1D
 
 		1d_tool.py -infile ${WD}/${s}/Motion_${condition}_runs.1D \
-		-set_nruns 4 -show_censor_count -censor_motion 0.3 ${s}_${condition} -censor_prev_TR -overwrite
+		-set_nruns 4 -show_censor_count -censor_motion 0.2 ${s}_${condition} -censor_prev_TR -overwrite
 
 		#tissue regressors
 		cat $(/bin/ls ${WD}/${s}/CSF_TS_${condition}_run*.1D | sort -V) > ${WD}/${s}/RegCSF_${condition}_TS.1D
@@ -118,6 +118,7 @@ for s in 503; do
 		-concat '1D: 0 102 204 306' \
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
+		-censor ${WD}/${s}/${s}_${condition}_censor.1D \
 		-num_stimts 1 \
 		-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
 		-iresp 1 ${condition}_FIR \
@@ -133,6 +134,7 @@ for s in 503; do
 		-concat '1D: 0 102 204 306' \
 		-mask ${WD}/ROIs/100overlap_mask+tlrc \
 		-polort A \
+		-censor ${WD}/${s}/${s}_${condition}_censor.1D \
 		-num_stimts 1 \
 		-stim_times 1 ${WD}/${s}/${condition}_stimtime.1D 'TENT(-1.5, 28.5, 20)' -stim_label 1 ${condition}_FIR \
 		-iresp 1 ${condition}_FIR_nogs \
