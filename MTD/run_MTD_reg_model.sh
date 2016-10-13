@@ -4,17 +4,18 @@
 WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 SCRIPT='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 MTD='/home/despoB/kaihwang/bin/TDSigEI/MTD'
-TRrange=(3..101 105..203 207..305 309..407) #skip first 3 volumens for all runs because of intial transition effects in data
+TRrange=(0..101 102..203 204..305 306..407) 
 
 cd $WD
 for s in 503; do
 
+	rm -rf /tmp/${s}/
 	mkdir /tmp/${s}
 
 	cd /tmp/${s}/
 
 	#repeat for two different datasets
-	for dset in nusiance FIR; do #FIR 
+	for dset in nusiance FIR; do #FIR nusiance
 
 		for condition in FH Fo Fp HF Ho Hp; do  # Fo Fp HF Ho Hp
 
@@ -41,7 +42,7 @@ for s in 503; do
 				#cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
 
 				#loop through windows
-				for w in 5 7 9 11 13 15 17 19; do
+				for w in 5 10 15 20; do
 					echo "/tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_w${w}_${condition}_run${run}_VC-FFA.1D ${w}" | python ${MTD}/run_MTD.py
 					echo "/tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_w${w}_${condition}_run${run}_VC-PPA.1D ${w}" | python ${MTD}/run_MTD.py
 				done
@@ -50,7 +51,7 @@ for s in 503; do
 
 			#concat TS
 			#TD regressors
-			for w in 5 7 9 11 13 15 17 19; do
+			for w in 5 10 15 20; do
 				cat $(/bin/ls /tmp/${s}/${dset}_Reg_w${w}_${condition}_run*_VC-FFA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_${condition}_runs.1D	
 				cat $(/bin/ls /tmp/${s}/${dset}_Reg_w${w}_${condition}_run*_VC-PPA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_${condition}_runs.1D	
 			done
@@ -66,7 +67,7 @@ for s in 503; do
 		done
 
 		# messy compiling regressors
-		for w in 5 7 9 11 13 15 17 19; do
+		for w in 5 10 15 20; do
 			cat /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_FH_all.1D
 			cat /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_FH_all.1D
 			cat /tmp/${s}/ZEROs /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_HF_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_HF_all.1D
@@ -90,8 +91,10 @@ for s in 503; do
 		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_PPA_Fp_runs.1D > /tmp/${s}/${dset}_BCReg_PPA_Fp_all.1D
 		cat /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/${dset}_BCReg_VC_Fp_runs.1D > /tmp/${s}/${dset}_BCReg_VC_Fp_all.1D
 
+		cat ${WD}/${s}/${s}_FH_censor.1D ${WD}/${s}/${s}_HF_censor.1D ${WD}/${s}/${s}_Hp_censor.1D ${WD}/${s}/${s}_Fp_censor.1D > /tmp/${s}/censor.1D
+
 		# run big model!
-		for w in 5 7 9 11 13 15 17 19; do
+		for w in 5 10 15 20; do
 			3dDeconvolve \
 			-input /tmp/${s}/${dset}_Reg_FH_errts_run1.nii.gz \
 			/tmp/${s}/${dset}_Reg_FH_errts_run2.nii.gz \
@@ -112,6 +115,7 @@ for s in 503; do
 			-mask ${WD}/ROIs/100overlap_mask+tlrc \
 			-polort A \
 			-num_stimts 20 \
+			-censor /tmp/${s}/censor.1D \
 			-stim_file 1 /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_FH_all.1D -stim_label 1 MTD_FH_FFA-VC \
 			-stim_file 2 /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_FH_all.1D -stim_label 2 MTD_FH_PPA-VC \
 			-stim_file 3 /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_HF_all.1D -stim_label 3 MTD_HF_FFA-VC \
@@ -156,18 +160,21 @@ for s in 503; do
 			-nocout \
 			-bucket /tmp/${s}/${dset}_w${w}_MTD_BC_stats \
 			-GOFORIT 100 \
-			-noFDR
+			-noFDR \
+			-x1D_stop
 
 			. /tmp/${s}/${dset}_w${w}_MTD_BC_stats.REML_cmd
 			
 			mv ${dset}_w${w}_MTD_BC_stats_REML+tlrc* ${WD}/${s}/
-			mv ${dset}_w${w}_MTD_BC_stats+tlrc* ${WD}/${s}/
+			
+			#mv ${dset}_w${w}_MTD_BC_stats+tlrc* ${WD}/${s}/
 		done
 	done	
 
 
 	cd ${WD}/${s} 
 	rm -rf /tmp/${s}/
+
 done
 
 

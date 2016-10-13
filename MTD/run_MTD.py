@@ -44,7 +44,7 @@ def coupling(data,window):
 
     #temporal smoothing
     temp = np.reshape(mtd,[der,nodes*nodes])
-    sma = pd.rolling_mean(temp,window, center=False)
+    sma = pd.rolling_mean(temp,window, center=True)
     sma = np.reshape(sma,[der,nodes,nodes])
     
     return (mtd, sma)
@@ -58,7 +58,7 @@ wsize=int(w)
 TS1 = np.loadtxt(a)
 TS2 = np.loadtxt(b)
 MTD = coupling(np.array([TS1, TS2]).T, wsize)[1][:,0,1]
-MTD[np.isnan(MTD)] = 0; #turn nans to zero for saving
+MTD[np.isnan(MTD)] = 0; #turn nans to zero
 MTD = np.insert(MTD,0,0) #insert 0 to the first element because its temporal diff
 #shifted_MTD = np.concatenate((np.array([0,0,0]),MTD[8:],np.array([0,0,0,0,0])))
 
