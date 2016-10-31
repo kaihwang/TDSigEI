@@ -7,10 +7,10 @@ library(reshape2)
 library(scales)
 library("psyphy")
 library("grid")
-
-# data are saved in google share folder
-setwd("~/Google Drive/Projects/TDSigEI/Data")
-path <- "~/Google Drive/Projects/TDSigEI/Data"
+library('lme4')
+library('lsmeans')        # data are saved in google share folder
+setwd("~/Google Drive/Projects/TDSigEI/Data/TDSigEI/")
+path <- "~/Google Drive/Projects/TDSigEI/Data/TDSigEI/"
 
 
 #Initialize dataframe
@@ -25,35 +25,40 @@ Data <-data.frame(Subj = character(),
                   IbsetTune =numeric ())
 
 # load data
-Subjects <- c(503, 505, 508, 509, 510, 512, 513, 516, 517, 518, 519, 523, 527, 528,529,530,531,532,534,536,537,539,540,542,546,547,549,550)
+Subjects <- c(503, 505, 508, 509, 510, 512, 513, 516, 518, 519, 523, 527, 528,529,530,532,534,536,537,540,542,546,547,549,550)
 for (s in Subjects) {
   file.names <- dir(path, pattern = paste("^.*", s, ".*\\.txt", sep=""))
   
   for (i in 1:length(file.names)) {
       tmpData <- read.table(file = file.names[i], header = FALSE, sep = "\t",
-             colClasses = c("NULL", "factor", "factor", "integer", "integer", "integer", "integer", "integer", "numeric", "numeric", "NULL"),
-             col.names = c(" ","Condtion", "MotorMapping", "Match", "Accu", "FA", "RH", "LH", "RT", "OnsetTime"," "))
+             colClasses = c("NULL", "factor", "factor", "factor", "integer", "integer", "integer", "integer", "numeric", "numeric", "NULL"),
+             col.names = c(" ","Condition", "MotorMapping", "Match", "Accu", "FA", "RH", "LH", "RT", "OnsetTime"," "))
       tmpData$Subj <- paste("S",s, sep="")
       Data <- rbind(Data, tmpData)
   }
 }
-Data[Data$RT==-1,"RT"]<-''
+Data[Data$RT==-1,"RT"]<-''  #no button press replace with missing value
 Data$RT<-as.numeric(Data$RT)
+Data<- Data[Data$Condition!='B',] #take out B condition
+Data$Condition <-factor(Data$Condition)
+write.csv(Data, 'BehavData.csv')
 
 
-### tabulate data
-Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion, Data$Match), mean)
-Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion, Data$Match), mean, na.rm = TRUE)
+### tabulate descriptive stats, do a simple anova
+Sum.Accu <- ddply(Data, c("Subj", "Condition", "MotorMapping"), summarise, mean = mean(Accu, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
+Sum.RT <- ddply(Data, c("Subj", "Condition", "MotorMapping"), summarise, mean = mean(RT, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
 
-S#Stats.Accu <- tapply(Data$Accu, list(Data$Subj, Data$Condtion), mean)
-#Stats.RT <- tapply(Data$RT, list(Data$Subj, Data$Condtion), mean, na.rm = TRUE)
-
-#Stats.Accu <- tapply(Data$Accu, list(Data$Condtion, Data$Match), mean)
-#Stats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean, na.rm = TRUE)
-#inStats.RT <- tapply(Data$RT, list(Data$Condtion, Data$Match), mean, na.rm = TRUE)
+RTmodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.RT)
+Accumodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.Accu)
 
 
+### first graph the data to llok at distribution
 
+### fit repeated measure ANOVA model
+
+### Fit mixed effect model
+accu <- melt(Stats.Accu.mean)
+rename(accu, c("row.names"="Subject", "NA" = "Condition"))
 ### calculate d-prime for FH
 d<-{}
 n <- 1
