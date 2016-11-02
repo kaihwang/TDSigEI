@@ -2,13 +2,16 @@
 
 # import libraries
 library(ggplot2)
+library(GGally)
 library(plyr)
 library(reshape2)
 library(scales)
-library("psyphy")
-library("grid")
-library('lme4')
-library('lsmeans')        # data are saved in google share folder
+library(psyphy)
+library(grid)
+library(lme4)
+library(lmerTest)
+library(lsmeans)       
+# data are saved in google share folder
 setwd("~/Google Drive/Projects/TDSigEI/Data/TDSigEI/")
 path <- "~/Google Drive/Projects/TDSigEI/Data/TDSigEI/"
 
@@ -41,24 +44,33 @@ Data[Data$RT==-1,"RT"]<-''  #no button press replace with missing value
 Data$RT<-as.numeric(Data$RT)
 Data<- Data[Data$Condition!='B',] #take out B condition
 Data$Condition <-factor(Data$Condition)
+#read.csv('Beha')
 write.csv(Data, 'BehavData.csv')
 
 
-### tabulate descriptive stats, do a simple anova
+### tabulate descriptive stats, do a repeated measure anova
 Sum.Accu <- ddply(Data, c("Subj", "Condition", "MotorMapping"), summarise, mean = mean(Accu, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
 Sum.RT <- ddply(Data, c("Subj", "Condition", "MotorMapping"), summarise, mean = mean(RT, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
 
-RTmodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.RT)
-Accumodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.Accu)
+## examine data
+ggpairs(Sum.Accu, columns = c(2,3,4))
+ggpairs(Sum.Accu, columns = c(2,3,4))
 
+RTAOVmodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.RT)
+AccAOVumodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.Accu)
+pairs(lsmeans(RTAOVmodel, ~Condition | MotorMapping ))  
 
-### first graph the data to llok at distribution
+# now use lmer to do repeated measure anova
+RTlmemodel <- lmer(mean ~ Condition*MotorMapping + (1|Subj) + (1|Condition:Subj) + (1|MotorMapping:Subj), Sum.RT) 
+contrast(lsmeans(RTlmemodel, ~Condition | MotorMapping ), 'pairwise') #pairwise contrast
+RTAOVlmer<-anova(RTlmemodel) #anova
 
-### fit repeated measure ANOVA model
 
 ### Fit mixed effect model
-accu <- melt(Stats.Accu.mean)
-rename(accu, c("row.names"="Subject", "NA" = "Condition"))
+m1<- glmer(Accu ~ Condition +(1|Subj), Data, family = binomial)
+m2<- glmer(Accu ~ Condition +(1|Subj) + (Condition | Subj), Data, family = binomial)
+
+
 ### calculate d-prime for FH
 d<-{}
 n <- 1
