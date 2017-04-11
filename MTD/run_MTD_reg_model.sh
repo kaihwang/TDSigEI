@@ -42,7 +42,7 @@ for s in 503; do
 				#cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
 
 				#loop through windows
-				for w in 5 10 15 20; do
+				for w in 5 10 15; do
 					echo "/tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_w${w}_${condition}_run${run}_VC-FFA.1D ${w}" | python ${MTD}/run_MTD.py
 					echo "/tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_w${w}_${condition}_run${run}_VC-PPA.1D ${w}" | python ${MTD}/run_MTD.py
 				done
@@ -51,7 +51,7 @@ for s in 503; do
 
 			#concat TS
 			#TD regressors
-			for w in 5 10 15 20; do
+			for w in 5 10 15; do
 				cat $(/bin/ls /tmp/${s}/${dset}_Reg_w${w}_${condition}_run*_VC-FFA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_${condition}_runs.1D	
 				cat $(/bin/ls /tmp/${s}/${dset}_Reg_w${w}_${condition}_run*_VC-PPA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_${condition}_runs.1D	
 			done
@@ -67,7 +67,7 @@ for s in 503; do
 		done
 
 		# messy compiling regressors
-		for w in 5 10 15 20; do
+		for w in 5 10 15; do
 			cat /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_FH_all.1D
 			cat /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_FH_all.1D
 			cat /tmp/${s}/ZEROs /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_HF_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_HF_all.1D
@@ -94,7 +94,7 @@ for s in 503; do
 		cat ${WD}/${s}/${s}_FH_censor.1D ${WD}/${s}/${s}_HF_censor.1D ${WD}/${s}/${s}_Hp_censor.1D ${WD}/${s}/${s}_Fp_censor.1D > /tmp/${s}/censor.1D
 
 		# run big model!
-		for w in 5 10 15 20; do
+		for w in 5 10 15; do
 			3dDeconvolve \
 			-input /tmp/${s}/${dset}_Reg_FH_errts_run1.nii.gz \
 			/tmp/${s}/${dset}_Reg_FH_errts_run2.nii.gz \

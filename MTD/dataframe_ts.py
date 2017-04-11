@@ -13,7 +13,7 @@ Subjects = glob.glob('5*')
 ROIpairs = ['FFA-VC', 'PPA-VC']
 ROIs = ['FFA', 'PPA', 'VC']
 Conditions = ['FH', 'HF', 'Fp', 'Hp']
-dsets = ['FIR'] #'nusiance'
+dsets = ['FIR'] #'FIR' nusiance
 
 os.chdir('/home/despoB/kaihwang/bin/TDSigEI/MTD')
 
@@ -24,7 +24,7 @@ for dset in dsets:
 				for run in np.arange(1,5):
 					#for roi in ROIpairs:	
 					tmpdf = pd.DataFrame()
-					tmpdf['Time'] = np.arange(1,100)
+					tmpdf['Time'] = np.arange(1,103)
 					tmpdf['Subject'] = s
 					tmpdf['Condition'] = cond
 					tmpdf['Dataset'] = dset	

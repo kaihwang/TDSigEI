@@ -4,7 +4,7 @@
 WD='/home/despoB/kaihwang/TRSE/TDSigEI'
 SCRIPT='/home/despoB/kaihwang/TRSE/TDSigEI/Scripts'
 MTD='/home/despoB/kaihwang/bin/TDSigEI/MTD'
-TRrange=(3..101 105..203 207..305 309..407) #skip first 3 volumens for all runs because of intial transition effects in data
+TRrange=(0..101 102..203 204..305 306..407)  #skip first 3 volumens for all runs because of intial transition effects in data
 
 cd $WD
 for s in 503; do
@@ -41,20 +41,20 @@ for s in 503; do
 				cp /tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D ${WD}/${s}/1Ds
 				cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds				
 
-				3dBandpass -prefix /tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz -input /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -band 0 0.1
+				# 3dBandpass -prefix /tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz -input /tmp/${s}/${dset}_Reg_${condition}_errts_run${run}.nii.gz -band 0 0.1
 
-				3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_BPReg_${condition}_FFA_run${run}.1D
+				# 3dmaskave -mask ${WD}/${s}/FFA_indiv_ROI.nii.gz -q \
+				# /tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_BPReg_${condition}_FFA_run${run}.1D
 
-				3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_BPReg_${condition}_PPA_run${run}.1D
+				# 3dmaskave -mask ${WD}/${s}/PPA_indiv_ROI.nii.gz -q \
+				# /tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_BPReg_${condition}_PPA_run${run}.1D
 
-				3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
-				/tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_BPReg_${condition}_VC_run${run}.1D
+				# 3dmaskave -mask ${WD}/${s}/V1_indiv_ROI.nii.gz -q \
+				# /tmp/${s}/${dset}_BPReg_${condition}_errts_run${run}.nii.gz > /tmp/${s}/${dset}_BPReg_${condition}_VC_run${run}.1D
 
-				cp /tmp/${s}/${dset}_BPReg_${condition}_FFA_run${run}.1D ${WD}/${s}/1Ds
-				cp /tmp/${s}/${dset}_BPReg_${condition}_PPA_run${run}.1D ${WD}/${s}/1Ds
-				cp /tmp/${s}/${dset}_BPReg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
+				# cp /tmp/${s}/${dset}_BPReg_${condition}_FFA_run${run}.1D ${WD}/${s}/1Ds
+				# cp /tmp/${s}/${dset}_BPReg_${condition}_PPA_run${run}.1D ${WD}/${s}/1Ds
+				# cp /tmp/${s}/${dset}_BPReg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
 
 			done
 		done

@@ -5,13 +5,13 @@
 # two within subject factors: seedROI {FFA, PPA} or (RH LH) x attention conditions {T, P, D}
 # note no between subject variables
 
-for w in 5 7 9 11 13 15 17 19; do
-	for dset in nusiance FIR; do
+for w in 7 8 9 11 12 13; do
+	for dset in FIR nusiance; do
 		echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
 		3dANOVA3 -type 4 \\
 		-alevels 2 \\
 		-blevels 3 \\
-		-clevels 28 \\
+		-clevels 25 \\
 		-fa main_effect_roi \\
 		-fb main_effect_condition \\
 		-fab roi_x_condition \\
@@ -52,17 +52,17 @@ for w in 5 7 9 11 13 15 17 19; do
 
 		echo "-bucket ANOVA_MTD_w${w}_${dset}.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
 
-		#. /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
+		. /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_MTD_${dset}.sh
 
 	done
 
 	#for BC
-	for dset in nusiance FIR; do
+	for dset in FIR znusiance; do
 		echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
 		3dANOVA3 -type 4 \\
 		-alevels 2 \\
 		-blevels 3 \\
-		-clevels 28 \\
+		-clevels 25 \\
 		-fa main_effect_roi \\
 		-fb main_effect_condition \\
 		-fab roi_x_condition \\
@@ -103,7 +103,7 @@ for w in 5 7 9 11 13 15 17 19; do
 
 		echo "-bucket ANOVA_BC_w${w}_${dset}.nii.gz" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
 
-		. /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
+		#. /home/despoB/kaihwang/TRSE/TDSigEI/Group/ANOVA_BC_${dset}.sh
 
 	done
 done
