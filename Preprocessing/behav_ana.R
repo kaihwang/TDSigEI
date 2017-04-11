@@ -40,13 +40,15 @@ for (s in Subjects) {
 Data[Data$RT==-1,"RT"]<-''  #no button press replace with missing value
 Data$RT<-as.numeric(Data$RT)
 Data<- Data[Data$Condition!='B',] #take out B condition
+Data<- Data[Data$Condition!='Fo',] #take out localizers
+Data<- Data[Data$Condition!='Ho',]
 Data$Condition <-factor(Data$Condition)
 write.csv(Data, 'BehavData.csv')
 
 
 ### tabulate descriptive stats, do a simple anova
-Sum.Accu <- ddply(Data, c("Subj", "Condition", "MotorMapping"), summarise, mean = mean(Accu, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
-Sum.RT <- ddply(Data, c("Subj", "Condition", "MotorMapping"), summarise, mean = mean(RT, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
+Sum.Accu <- ddply(Data, c("Subj", "Condition"), summarise, mean = mean(Accu, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
+Sum.RT <- ddply(Data, c("Subj", "Condition"), summarise, mean = mean(RT, na.rm = TRUE), sd = sd(RT, na.rm = TRUE))
 
 RTmodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.RT)
 Accumodel<- aov(mean ~ Condition*MotorMapping + Error(Subj/(Condition*MotorMapping)), Sum.Accu)
