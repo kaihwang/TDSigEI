@@ -5,7 +5,7 @@ SCRIPT='/home/despoB/kaihwang/TRSE/TRSEPPI/TRSE_scripts'
 MTD='/home/despoB/kaihwang/bin/TDSigEI/MTD'
 
 
-for s in 1106; do
+for s in ${SUB_ID}; do
 	
 	cd $WD/${s}
 
@@ -110,7 +110,7 @@ for s in 1106; do
 		-stim_file 8 ${WD}/${s}/${condition}_motionRuns.1D[5] -stim_label 8 motpar6 -stim_base 8 \
 		-stim_file 9 ${WD}/${s}/${condition}_RegCSF_TS.1D -stim_label 9 CSF -stim_base 9 \
 		-stim_file 10 ${WD}/${s}/${condition}_RegWM_TS.1D -stim_label 10 WM -stim_base 10 \
-		-stim_file 11 ${WD}/${s}/${condition}_RegGS_TS.1D -stim_label 11 WM -stim_base 11 \
+		-stim_file 11 ${WD}/${s}/${condition}_RegGS_TS.1D -stim_label 11 GS -stim_base 11 \
 		-iresp 1 ${condition}_stim1_FIR \
 		-iresp 2 ${condition}_stim2_FIR \
 		-rout \
