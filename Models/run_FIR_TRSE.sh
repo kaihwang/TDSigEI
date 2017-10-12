@@ -5,7 +5,7 @@ SCRIPT='/home/despoB/kaihwang/TRSE/TRSEPPI/TRSE_scripts'
 MTD='/home/despoB/kaihwang/bin/TDSigEI/MTD'
 
 
-for s in ${SUB_ID}; do
+for s in ${SGE_TASK}; do
 	
 	cd $WD/${s}
 
