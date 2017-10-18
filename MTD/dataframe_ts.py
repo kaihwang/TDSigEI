@@ -13,7 +13,7 @@ Subjects = glob.glob('5*')
 ROIpairs = ['FFA-VC', 'PPA-VC']
 ROIs = ['FFA', 'PPA', 'VC']
 Conditions = ['FH', 'HF', 'Fp', 'Hp']
-dsets = ['FIR'] #'FIR' nusiance
+dsets = ['nusiance'] #'FIR' nusiance
 
 os.chdir('/home/despoB/kaihwang/bin/TDSigEI/MTD')
 
