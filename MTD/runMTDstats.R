@@ -26,7 +26,7 @@ ggplot(data=Data, aes(x=Condition, y=value)) +facet_grid(~variable) +geom_boxplo
 
 
 
-t.test(Data[(Data$Condition=='FH' & Data$variable=='MTD.FFA.VC'),4], Data[(Data$Condition=='FH' & Data$variable=='MTD.PPA.VC'),4], paired=TRUE)
+t.test(Data[(Data$Condition=='FH' & Data$variable=='MTD.FFA.VC'),4], Data[(Data$Condition=='Fp' & Data$variable=='MTD.FFA.VC'),4], paired=TRUE)
 
 
 #
