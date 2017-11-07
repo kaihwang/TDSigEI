@@ -5,7 +5,7 @@ SCRIPT='/home/despoB/kaihwang/TRSE/TRSEPPI/TRSE_scripts'
 MTD='/home/despoB/kaihwang/bin/TDSigEI/MTD'
 
 
-for s in ${SGE_TASK}; do
+for s in ; do #${SGE_TASK}
 	
 	cd $WD/${s}
 
@@ -96,10 +96,14 @@ for s in ${SGE_TASK}; do
 
 	for condition in FH HF CAT BO; do
 		
+		rm ${condition}_FIR_stats*
+		rm ${condition}_FIR_design_mat*
+		rm ${s}_FIR_${condition}_errts.nii.gz
+		rm ${condition}_stim*FIR*
 		3dDeconvolve -input $(/bin/ls ${WD}/${s}/${s}_${condition}_run*.nii.gz | sort -V) \
 		-mask /home/despoB/TRSEPPI/TRSEPPI/overlap_mask/TRSE_80perOverlap_mask.nii.gz \
 		-polort A \
-		-num_stimts 11 \
+		-num_stimts 10 \
 		-stim_times 1 ${WD}/${s}/${condition}_stim1.1D 'TENT(0, 14, 15)' -stim_label 1 ${condition}_stim1 \
 		-stim_times 2 ${WD}/${s}/${condition}_stim2.1D 'TENT(0, 14, 15)' -stim_label 2 ${condition}_stim2 \
 		-stim_file 3 ${WD}/${s}/${condition}_motionRuns.1D[0] -stim_label 3 motpar1 -stim_base 3 \
@@ -110,7 +114,6 @@ for s in ${SGE_TASK}; do
 		-stim_file 8 ${WD}/${s}/${condition}_motionRuns.1D[5] -stim_label 8 motpar6 -stim_base 8 \
 		-stim_file 9 ${WD}/${s}/${condition}_RegCSF_TS.1D -stim_label 9 CSF -stim_base 9 \
 		-stim_file 10 ${WD}/${s}/${condition}_RegWM_TS.1D -stim_label 10 WM -stim_base 10 \
-		-stim_file 11 ${WD}/${s}/${condition}_RegGS_TS.1D -stim_label 11 GS -stim_base 11 \
 		-iresp 1 ${condition}_stim1_FIR \
 		-iresp 2 ${condition}_stim2_FIR \
 		-rout \

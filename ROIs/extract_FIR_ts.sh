@@ -21,10 +21,15 @@ for s in $(/bin/ls -d 5*); do
 	#group ROIs
 
 	for condition in FH Fo Fp HF Ho Hp; do
-		3dmaskave -mask ${WD}/ROIs/RIFJ.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_IFJ_${condition}.1D
-		3dmaskave -mask ${WD}/ROIs/R_IPS.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_IPS_${condition}.1D
+		#3dmaskave -mask ${WD}/ROIs/RIFJ.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_IFJ_${condition}.1D
+		#3dmaskave -mask ${WD}/ROIs/R_IPS.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_IPS_${condition}.1D
 		#3dmaskave -mask ${WD}/ROIs/FEF_BC.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_FEF_${condition}.1D
 		#3dmaskSVD -mask ${ROI}masked.nii.gz \
+		3dmaskave -mask ${WD}/ROIs/MD.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_MD_${condition}.1D
+		3dmaskave -mask ${WD}/ROIs/AN.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_AN_${condition}.1D
+		3dmaskave -mask ${WD}/ROIs/VL.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_VL_${condition}.1D
+		3dmaskave -mask ${WD}/ROIs/Pu.nii.gz -q ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_Pu_${condition}.1D	
+
 		#-input ${condition}_FIR+tlrc > ${WD}/FIR_1Ds/${s}_${ROI}_${condition}.1D 
 	done
 
