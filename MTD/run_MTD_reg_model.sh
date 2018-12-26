@@ -15,7 +15,7 @@ for s in 503; do
 	cd /tmp/${s}/
 
 	#repeat for two different datasets
-	for dset in nusiance FIR; do #FIR nusiance
+	for dset in FIR; do #FIR nusiance
 
 		for condition in FH Fo Fp HF Ho Hp; do  # Fo Fp HF Ho Hp
 
@@ -42,7 +42,7 @@ for s in 503; do
 				#cp /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D ${WD}/${s}/1Ds
 
 				#loop through windows
-				for w in 5 10 15; do
+				for w in 15; do
 					echo "/tmp/${s}/${dset}_Reg_${condition}_FFA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_w${w}_${condition}_run${run}_VC-FFA.1D ${w}" | python ${MTD}/run_MTD.py
 					echo "/tmp/${s}/${dset}_Reg_${condition}_PPA_run${run}.1D /tmp/${s}/${dset}_Reg_${condition}_VC_run${run}.1D /tmp/${s}/${dset}_Reg_w${w}_${condition}_run${run}_VC-PPA.1D ${w}" | python ${MTD}/run_MTD.py
 				done
@@ -51,7 +51,7 @@ for s in 503; do
 
 			#concat TS
 			#TD regressors
-			for w in 5 10 15; do
+			for w in 15; do
 				cat $(/bin/ls /tmp/${s}/${dset}_Reg_w${w}_${condition}_run*_VC-FFA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_${condition}_runs.1D	
 				cat $(/bin/ls /tmp/${s}/${dset}_Reg_w${w}_${condition}_run*_VC-PPA.1D | sort -V) > /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_${condition}_runs.1D	
 			done
@@ -67,7 +67,7 @@ for s in 503; do
 		done
 
 		# messy compiling regressors
-		for w in 5 10 15; do
+		for w in 15; do #5 10 
 			cat /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_FH_all.1D
 			cat /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_FH_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_PPA-VC_FH_all.1D
 			cat /tmp/${s}/ZEROs /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_HF_runs.1D /tmp/${s}/ZEROs /tmp/${s}/ZEROs > /tmp/${s}/${dset}_MTDReg_w${w}_FFA-VC_HF_all.1D
@@ -94,7 +94,7 @@ for s in 503; do
 		cat ${WD}/${s}/${s}_FH_censor.1D ${WD}/${s}/${s}_HF_censor.1D ${WD}/${s}/${s}_Hp_censor.1D ${WD}/${s}/${s}_Fp_censor.1D > /tmp/${s}/censor.1D
 
 		# run big model!
-		for w in 5 10 15; do
+		for w in 15; do
 			3dDeconvolve \
 			-input /tmp/${s}/${dset}_Reg_FH_errts_run1.nii.gz \
 			/tmp/${s}/${dset}_Reg_FH_errts_run2.nii.gz \
@@ -136,7 +136,7 @@ for s in 503; do
 			-stim_file 18 /tmp/${s}/${dset}_BCReg_VC_HF_all.1D -stim_label 18 BC_HF_VC \
 			-stim_file 19 /tmp/${s}/${dset}_BCReg_VC_Hp_all.1D -stim_label 19 BC_Hp_VC \
 			-stim_file 20 /tmp/${s}/${dset}_BCReg_VC_Fp_all.1D -stim_label 20 BC_Fp_VC \
-			-num_glt 17 \
+			-num_glt 24 \
 			-gltsym 'SYM: +0.5*MTD_FH_FFA-VC +0.5*MTD_HF_PPA-VC' -glt_label 1 MTD_Target \
 			-gltsym 'SYM: +0.5*MTD_HF_FFA-VC +0.5*MTD_FH_PPA-VC' -glt_label 2 MTD_Distractor \
 			-gltsym 'SYM: +0.5*MTD_Fp_FFA-VC +0.5*MTD_Hp_PPA-VC' -glt_label 3 MTD_Target_Baseline \
@@ -154,18 +154,25 @@ for s in 503; do
 			-gltsym 'SYM: +1*BC_FH_VC +1*BC_HF_VC -1*BC_Fp_VC -1*BC_Hp_VC' -glt_label 15 BC_Attn-Baseline_VC \
 			-gltsym 'SYM: +1*BC_FH_VC -1*BC_Fp_VC' -glt_label 16 BC_FH-Baseline_VC \
 			-gltsym 'SYM: +1*BC_HF_VC -1*BC_Hp_VC' -glt_label 17 BC_HF-Baseline_VC \
+			-gltsym 'SYM: -1*MTD_FH_FFA-VC -1*MTD_HF_PPA-VC +1*MTD_Fp_FFA-VC +1*MTD_Hp_PPA-VC' -glt_label 18 MTD_Baseline-Target \
+			-gltsym 'SYM: -1*MTD_HF_FFA-VC -1*MTD_FH_PPA-VC +1*MTD_Fp_FFA-VC +1*MTD_Hp_PPA-VC' -glt_label 19 MTD_Baseline-Distractor \
+			-gltsym 'SYM: -1*MTD_FH_FFA-VC -1*MTD_HF_PPA-VC +1*MTD_HF_FFA-VC +1*MTD_FH_PPA-VC' -glt_label 20 MTD_Distractor-Target \
+			-gltsym 'SYM: -1*BC_FH_FFA -1*BC_HF_PPA +1*BC_Fp_FFA +1*BC_Hp_PPA' -glt_label 21 BC_Baseline-Target \
+			-gltsym 'SYM: -1*BC_HF_FFA -1*BC_FH_PPA +1*BC_Fp_FFA +1*BC_Hp_PPA' -glt_label 22 BC_Baseline-Distractor \
+			-gltsym 'SYM: -1*BC_FH_FFA -1*BC_HF_PPA +1*BC_HF_FFA +1*BC_FH_PPA' -glt_label 23 BC_Distractor-Target \
+			-gltsym 'SYM: -1*BC_FH_VC -1*BC_HF_VC +1*BC_Fp_VC +1*BC_Hp_VC' -glt_label 24 BC_Baseline_VC-Attn \
 			-fout \
 			-rout \
 			-tout \
 			-nocout \
-			-bucket /tmp/${s}/${dset}_w${w}_MTD_BC_stats \
+			-bucket /tmp/${s}/${dset}_w${w}_MTDperm_BC_stats \
 			-GOFORIT 100 \
 			-noFDR \
 			-x1D_stop
 
 			. /tmp/${s}/${dset}_w${w}_MTD_BC_stats.REML_cmd
 			
-			mv ${dset}_w${w}_MTD_BC_stats_REML+tlrc* ${WD}/${s}/
+			mv ${dset}_w${w}_MTDperm_BC_stats_REML+tlrc* ${WD}/${s}/
 			
 			#mv ${dset}_w${w}_MTD_BC_stats+tlrc* ${WD}/${s}/
 		done
