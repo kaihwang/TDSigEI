@@ -62,7 +62,7 @@ for s in 503; do
 			cat $(/bin/ls /tmp/${s}/${dset}_Reg_${condition}_VC_run*.1D | sort -V) > /tmp/${s}/${dset}_BCReg_VC_${condition}_runs.1D
 
 			# need to create zero factors for combining TD and P conditions...
-			yes "0" | head -n 396 > /tmp/${s}/ZEROs
+			yes "0" | head -n 408 > /tmp/${s}/ZEROs
 
 		done
 
@@ -170,7 +170,7 @@ for s in 503; do
 			-noFDR \
 			-x1D_stop
 
-			. /tmp/${s}/${dset}_w${w}_MTD_BC_stats.REML_cmd
+			. /tmp/${s}/${dset}_w${w}_MTDperm_BC_stats.REML_cmd
 			
 			mv ${dset}_w${w}_MTDperm_BC_stats_REML+tlrc* ${WD}/${s}/
 			

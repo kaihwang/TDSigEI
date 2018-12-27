@@ -19,47 +19,48 @@
 
 #MTD_Target MTD_Distractor MTD_Target-Baseline MTD_Distractor-Baseline MTD_Target-Distractor BC_Target BC_Distractor BC_Target-Baseline BC_Distractor-Baseline BC_Target-Distractor
 
-for contrast in BC_Attn-Baseline_VC; do
-	for w in 5 10 15; do
-		for dset in FIR nusiance; do
-			echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
-			3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/${dset}_${contrast}_w${w}_groupMEMA \\
-			-set ${contrast} \\" > /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
+# for contrast in BC_Attn-Baseline_VC; do
+# 	for w in 15; do #5 10 15
+# 		for dset in FIR nusiance; do
+# 			echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
+# 			3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/${dset}_${contrast}_w${w}_groupMEMA \\
+# 			-set ${contrast} \\" > /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
 
-			cd /home/despoB/kaihwang/TRSE/TDSigEI/
-
-
-			for s in $(/bin/ls -d 5*); do
-				cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/FIR_w${w}_MTD_BC_stats_REML+tlrc | grep "${contrast}#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
-				tbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/FIR_w${w}_MTD_BC_stats_REML+tlrc | grep "${contrast}#0_Tstat" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
-				echo "${s} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${cbrik}] /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${tbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
-			done
-
-			echo "-cio -mask /home/despoB/TRSEPPI/TDSigEI/ROIs/100overlap_mask+tlrc " >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
-
-			#qsub -l mem_free=3G -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
-			. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
-
-		done
-	done
-done
+# 			cd /home/despoB/kaihwang/TRSE/TDSigEI/
 
 
+# 			for s in $(/bin/ls -d 5*); do
+# 				cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/FIR_w${w}_MTD_BC_stats_REML+tlrc | grep "${contrast}#0_Coef" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
+# 				tbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/FIR_w${w}_MTD_BC_stats_REML+tlrc | grep "${contrast}#0_Tstat" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
+# 				echo "${s} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${cbrik}] /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${tbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
+# 			done
+
+# 			echo "-cio -mask /home/despoB/TRSEPPI/TDSigEI/ROIs/100overlap_mask+tlrc " >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
+
+# 			#qsub -l mem_free=3G -V -M kaihwang -m e -e ~/tmp -o ~/tmp /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
+# 			. /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
+
+# 		done
+# 	done
+# done
 
 
-for contrast in MTD_Target MTD_Distractor MTD_Target-Baseline MTD_Distractor-Baseline MTD_Target-Distractor BC_Target BC_Distractor BC_Target-Baseline BC_Distractor-Baseline BC_Target-Distractor; do
-	for w in 5 10 15; do
-		for dset in FIR nusiance; do
+
+#MTD_Target MTD_Distractor MTD_Target-Baseline MTD_Distractor-Baseline MTD_Target-Distractor BC_Target BC_Distractor BC_Target-Baseline BC_Distractor-Baseline BC_Target-Distractor
+for contrast in MTD_Target-Baseline; do
+	for w in 15; do
+		for dset in FIR ; do #nusiance
 			echo "cd /home/despoB/kaihwang/TRSE/TDSigEI/Group 
 			3dMEMA -prefix /home/despoB/kaihwang/TRSE/TDSigEI/Group/${dset}_${contrast}_R2_w${w}_groupMEMA \\
 			-set ${contrast} \\" > /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
 
 			cd /home/despoB/kaihwang/TRSE/TDSigEI/
-
+			
 
 			for s in $(/bin/ls -d 5*); do
 				cbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/FIR_w${w}_MTD_BC_stats_REML+tlrc | grep "${contrast}_R^2" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
 				tbrik=$(3dinfo -verb /home/despoB/TRSEPPI/TDSigEI/${s}/FIR_w${w}_MTD_BC_stats_REML+tlrc | grep "${contrast}#0_Tstat" | grep -o ' #[0-9]\{1,3\}' | grep -o '[0-9]\{1,3\}')
+
 				echo "${s} /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${cbrik}] /home/despoB/TRSEPPI/TDSigEI/${s}/${dset}_w${w}_MTD_BC_stats_REML+tlrc[${tbrik}] \\" >> /home/despoB/kaihwang/TRSE/TDSigEI/Group/groupstat_${dset}_${contrast}.sh
 			done
 
